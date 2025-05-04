@@ -32,7 +32,7 @@ const Game: React.FC = () => {
       <h1>{GAME_LOGIC.currentQuestion.question}</h1>
       <ol>
         {GAME_LOGIC.currentQuestion.answers.map((answer, index) => (
-          <li key={index}>{index + 1}. {answer.revealed ? answer.code : "_"} - { answer.revealed ? answer.score : ""} | Reaveled By {answer.reaveledByTeam}</li>
+          <li key={index}>{index + 1}. {answer.revealed ? answer.code : "_"} - { answer.revealed ? answer.score : ""} | Reaveled By {answer.revealedByTeam}</li>
         ))}
       </ol>
       <h3>Points: {GAME_LOGIC.currentRound.points}</h3>

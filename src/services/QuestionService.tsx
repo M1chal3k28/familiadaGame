@@ -43,7 +43,7 @@ const sortAnswersByScore = (array: Answer[]): Answer[] => {
     ).map((answer) => ({
         ...answer,
         revealed: false,
-        reaveledByTeam: WhatTeam.TO_BE_DETERMINED
+        revealedByTeam: WhatTeam.TO_BE_DETERMINED
     }));
 };
 
@@ -127,6 +127,7 @@ export const getQuestionMeta = (question: Question): QuestionMeta => {
     return {
         answerCount: question.answers.length,
         longestAnswer,
-        mostScoredAnswerCode
+        mostScoredAnswerCode,
+        answersRevealed: 0
     };
 };

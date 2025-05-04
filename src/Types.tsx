@@ -5,7 +5,7 @@ export interface Answer {
     code: string;
     score: number;
     revealed: boolean;
-    reaveledByTeam: WhatTeam;
+    revealedByTeam: WhatTeam;
 };
 
 export enum QuestionType {
@@ -17,6 +17,7 @@ export interface QuestionMeta {
     answerCount: number;
     longestAnswer: number;
     mostScoredAnswerCode: string;
+    answersRevealed: number;
 };
 
 export interface Question {
@@ -39,6 +40,7 @@ export enum GamePhase {
 export interface Round {
     question: Question;
     points: number;
+    leftIntroRestarts: number; // <- number of times left to restart the round in case no one answers in the intro
 };
 
 export enum WhatTeam {
