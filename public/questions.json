@@ -1,0 +1,39 @@
+[
+    {
+      "id": 1,
+      "type": "normal",
+      "question": "Z czego korzystamy w łazience?",
+      "answers": [
+        { "code": "wanna", "score": 15 },
+        { "code": "prysznic", "score": 12 },
+        { "code": "lustro", "score": 8 },
+        { "code": "umywalka", "score": 6 },
+        { "code": "szafka", "score": 3 }
+      ]
+    },
+    {
+      "id": 2, 
+      "type": "hard", 
+      "question": "Czego używamy w kuchni?",
+      "answers": [
+        { "code": "patelnia", "score": 14 },
+        { "code": "nóż", "score": 11 },
+        { "code": "garnek", "score": 10 },
+        { "code": "czajnik", "score": 6 },
+        { "code": "deska do krojenia", "score": 4 }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "normal",
+      "question": "Co robisz rano?",
+      "answers": [
+        { "code": "myję zęby", "score": 13 },
+        { "code": "jem śniadanie", "score": 11 },
+        { "code": "ubieram się", "score": 9 },
+        { "code": "wstaję", "score": 6 },
+        { "code": "idę do pracy", "score": 5 }
+      ]
+    }
+  ]
+  
