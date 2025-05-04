@@ -8,7 +8,11 @@ const STORAGE_KEY = "questions";
  * Retrieves the questions stored in local storage.
  * @returns The array of questions stored in local storage.
  */
-export const getQuestions = (): Question[] => {
+export const getQuestions = async(): Promise<Question[]> => {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+        await initQuestions();
+    }
+    
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 };
 

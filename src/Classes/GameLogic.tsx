@@ -7,11 +7,11 @@ export class GameLogic {
     private gameInfo: GameInterface;
     private eventTarget: EventTarget = new EventTarget();
 
-    private constructor() {
+    private constructor(questions: Question[]) {
         this.gameInfo = {
             team1: new Team(WhatTeam.TEAM1),
             team2: new Team(WhatTeam.TEAM2),
-            rounds: getQuestions().map((question: Question) => {
+            rounds: questions.map((question: Question) => {
                 return {
                     question,
                     points: 0,
@@ -26,8 +26,8 @@ export class GameLogic {
     }
 
     private prepareTeams() {
-        this.gameInfo.team1.prepare();
-        this.gameInfo.team2.prepare();
+        this.gameInfo.team1.prepare(this.gameInfo.phase, this.gameInfo.startingTeam);
+        this.gameInfo.team2.prepare(this.gameInfo.phase, this.gameInfo.startingTeam);
     }
 
     private restartCurrentRound() {
@@ -287,14 +287,14 @@ export class GameLogic {
     public get team2(): Team { return this.gameInfo.team2; }
     public get currentTeam(): WhatTeam { return this.gameInfo.currentTeam; }
     
-    
-    public static getInstance() {
+    public static async createInstance(): Promise<GameLogic> {
         if (!GameLogic.instance) {
-            GameLogic.instance = new GameLogic();
+            const questions = await getQuestions(); // <- może być async
+            GameLogic.instance = new GameLogic(questions);
         }
         return GameLogic.instance;
     }
-    
+
     /**
      * Register a callback to be called whenever the game state changes.
      * Returns a function that can be called to remove the callback.
@@ -309,4 +309,4 @@ export class GameLogic {
 }
 
 export default GameLogic;
-export const GAME_LOGIC: GameLogic = GameLogic.getInstance();
+export const GAME_LOGIC: Promise<GameLogic> = GameLogic.createInstance();

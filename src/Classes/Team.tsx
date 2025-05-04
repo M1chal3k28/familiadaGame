@@ -1,4 +1,3 @@
-import { GAME_LOGIC } from "./GameLogic";
 import { GamePhase, WhatTeam } from "../Types";
 
 export default class Team {
@@ -26,12 +25,12 @@ export default class Team {
      * If the current game phase is QUESTION_MAIN and this team is the starting team,
      * increases the maximum allowed Xs (xbound) to three.
      */
-    public prepare(): void {
+    public prepare(gamePhase: GamePhase, startingTeam: WhatTeam): void {
         this.xcount = 0;
         this.xbound = 1;
 
-        const phaseIsMain = GAME_LOGIC.GamePhase === GamePhase.QUESTION_MAIN;
-        const startingTeamIsThisTeam = GAME_LOGIC.startingTeam === this.whatTeam;
+        const phaseIsMain = gamePhase === GamePhase.QUESTION_MAIN;
+        const startingTeamIsThisTeam = startingTeam === this.whatTeam;
 
         if (phaseIsMain && startingTeamIsThisTeam) {
             this.xbound = 3;
