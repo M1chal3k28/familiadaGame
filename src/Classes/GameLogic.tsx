@@ -1,6 +1,7 @@
 import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam } from "../Types";
 import Team from "./Team";
 import { getQuestions } from "../services/QuestionService";
+import { Warning } from "postcss";
 
 export class GameLogic {
     private static instance: GameLogic; 
@@ -66,7 +67,7 @@ export class GameLogic {
             this.gameInfo.phase = GamePhase.QUESTION_INTRO;
             this.gameInfo.currentRound += 1;
             this.gameInfo.currentTeam = WhatTeam.TO_BE_DETERMINED;
-            this.gameInfo.startingTeam = (WhatTeam.TO_BE_DETERMINED);
+            this.gameInfo.startingTeam = WhatTeam.TO_BE_DETERMINED;
         }
         
         this.prepareTeams();
@@ -116,7 +117,7 @@ export class GameLogic {
      * the next phase. Otherwise, the game phase is not changed.
      */
     private handleMainPhaseAnswer() {
-        const answeredByStartingTeam = this.gameInfo.currentTeam == this.gameInfo.startingTeam;
+        const answeredByStartingTeam = this.gameInfo.currentTeam === this.gameInfo.startingTeam;
         const allAnswersRevealed = this.currentRound.question.questionMeta.answersRevealed === this.currentRound.question.questionMeta.answerCount;
 
         // Check if all answers are revealed by the starting team
@@ -124,7 +125,6 @@ export class GameLogic {
             // Give all points to the team
             this._currentTeam.appendScore(this.currentRound.points);
             this.nextPhase();
-            this.emitUpdate();
             return;
         }  
         // If opposite team revealed any answer
@@ -132,7 +132,6 @@ export class GameLogic {
             // Give all points to the team
             this._currentTeam.appendScore(this.currentRound.points);
             this.nextPhase();
-            this.emitUpdate();
             return;
         }
     }
@@ -171,7 +170,7 @@ export class GameLogic {
                 winner = revealed[0].score > revealed[1].score ? revealed[0].revealedByTeam! : revealed[1].revealedByTeam!;
 
             // Set starting team for main phase
-            this.setStartingTeamIfNeeded(winner);
+            this.gameInfo.startingTeam = winner;
             this.nextPhase();
         }
     }
@@ -215,6 +214,11 @@ export class GameLogic {
      * If the team that we want to switch to is not blocked, it switches to that team.
      */
     private tryToSwitchTeams(): void {
+        if (this.gameInfo.currentTeam === WhatTeam.TO_BE_DETERMINED) { 
+            console.warn("Current team is not set Aborting team switch.");
+            return;
+        }
+
         const teamToSwitchTo = this.gameInfo.currentTeam === WhatTeam.TEAM1 ? WhatTeam.TEAM2 : WhatTeam.TEAM1;
         const team: Team = teamToSwitchTo === WhatTeam.TEAM1 ? this.gameInfo.team1 : this.gameInfo.team2;
         if (team.isBlocked) {
@@ -230,9 +234,9 @@ export class GameLogic {
             
             // Next round
             this.nextPhase(true);
-
             return;
         }
+
         // Switch team
         this.gameInfo.currentTeam = teamToSwitchTo;
         this.emitUpdate();
@@ -269,9 +273,8 @@ export class GameLogic {
         if (this.gameInfo.phase === GamePhase.QUESTION_MAIN) {
             this.handleMainPhaseAnswer();
         }
-
-        // if intro phase
-        if (this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
+        // else if intro phase
+        else if (this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
             this.handleIntroPhaseAnswer(answerObj);
         }
 

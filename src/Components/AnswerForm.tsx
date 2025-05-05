@@ -6,14 +6,14 @@ const AnswerForm: React.FC<AnswerFormProps> = ({gameLogic}: AnswerFormProps) => 
     const startingTeam = useRef<HTMLSelectElement>(null);
 
     // Handle answer check
-    const handleCheck = async () => {
+    const handleCheck = () => {
         const val = input.current?.value.trim();
         const startingTeamVal = startingTeam.current?.value;
         if (!val) return;
 
         gameLogic?.checkAnswer(val, startingTeamVal as WhatTeam);
         if (input.current)
-        input.current.value = "";
+            input.current.value = "";
     };
 
     return (
