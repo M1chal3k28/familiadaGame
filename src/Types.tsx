@@ -65,3 +65,13 @@ export type BoardGameProps = {
     inputRef?: RefObject<HTMLInputElement>;
     selectRef?: RefObject<HTMLSelectElement>;
 };
+
+export type Side = "left" | "right";
+export type TeamInfoProps = {
+    team?: Team;
+    side: Side;
+};
+
+export type TeamXsProps = {
+    team?: Team;
+};

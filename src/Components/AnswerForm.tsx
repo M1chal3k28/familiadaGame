@@ -25,7 +25,7 @@ const AnswerForm: React.FC<AnswerFormProps> = ({gameLogic}: AnswerFormProps) => 
             </select>
             )}
             <input ref={input} type="text" />
-            <button type="submit" onClick={handleCheck}>Check</button>
+            <button type="submit" className="bg-gray-200" onClick={handleCheck}>Check</button>
         </form>
     );
 };
