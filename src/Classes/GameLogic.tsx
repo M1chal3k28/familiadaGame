@@ -9,8 +9,8 @@ export class GameLogic {
 
     private constructor(questions: Question[]) {
         this.gameInfo = {
-            team1: new Team(WhatTeam.TEAM1),
-            team2: new Team(WhatTeam.TEAM2),
+            team1: new Team(WhatTeam.TEAM1, "Drużyna 1"),
+            team2: new Team(WhatTeam.TEAM2, "Drużyna 2"),
             rounds: questions.map((question: Question) => {
                 return {
                     question,
@@ -188,7 +188,7 @@ export class GameLogic {
         const team: Team = this._currentTeam;
         team.fail();
         // If team is blocked
-        if (team.isBlocked()) {
+        if (team.isBlocked) {
             this.tryToSwitchTeams();
         }
 
@@ -217,7 +217,7 @@ export class GameLogic {
     private tryToSwitchTeams(): void {
         const teamToSwitchTo = this.gameInfo.currentTeam === WhatTeam.TEAM1 ? WhatTeam.TEAM2 : WhatTeam.TEAM1;
         const team: Team = teamToSwitchTo === WhatTeam.TEAM1 ? this.gameInfo.team1 : this.gameInfo.team2;
-        if (team.isBlocked()) {
+        if (team.isBlocked) {
             // Check if intro phase
             if (this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
                 // Check if reset is allowed

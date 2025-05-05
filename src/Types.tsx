@@ -1,5 +1,7 @@
+import { RefObject } from "react";
 import "./Classes/Team";
 import Team from "./Classes/Team";
+import GameLogic from "./Classes/GameLogic";
 
 export interface Answer {
     code: string;
@@ -28,10 +30,6 @@ export interface Question {
     questionMeta: QuestionMeta;
 };
 
-export type BoardGameProps = {
-    question: Question;
-};
-
 export enum GamePhase {
     QUESTION_INTRO = "questionIntro",
     QUESTION_MAIN = "questionMain",
@@ -56,4 +54,14 @@ export interface GameInterface {
     phase: GamePhase;
     currentTeam: WhatTeam;
     startingTeam: WhatTeam;
+};
+
+export type AnswerFormProps = {
+    gameLogic?: GameLogic;
+}
+
+export type BoardGameProps = {
+    gameLogic?: GameLogic;
+    inputRef?: RefObject<HTMLInputElement>;
+    selectRef?: RefObject<HTMLSelectElement>;
 };

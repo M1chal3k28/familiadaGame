@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "PixelFont";
+    font-weight: bold;
+    font-style: oblique;
+    font-size: xx-large;
+    src: url("/Minecart_LCD_Polish.ttf");
+}  
