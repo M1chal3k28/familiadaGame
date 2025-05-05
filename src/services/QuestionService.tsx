@@ -98,7 +98,7 @@ export const initQuestions = async (): Promise<void> => {
     //     setQuestions(data);
     // }
 
-    const res = await fetch(`/${STORAGE_KEY}.json`);
+    const res = await fetch(`${import.meta.env.BASE_URL}${STORAGE_KEY}.json`);
     const data = await res.json();
     const processed = prepareQuestions(data);
     setQuestions(processed);
