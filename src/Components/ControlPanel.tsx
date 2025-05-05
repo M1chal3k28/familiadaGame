@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { WhatTeam, AnswerFormProps } from "../Types";
+import { WhatTeam, ControlPanelProps, GameState } from "../Types";
 
-const AnswerForm: React.FC<AnswerFormProps> = ({gameLogic}: AnswerFormProps) => {
+const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProps) => {
     const input = useRef<HTMLInputElement>(null);
     const startingTeam = useRef<HTMLSelectElement>(null);
 
@@ -16,7 +16,11 @@ const AnswerForm: React.FC<AnswerFormProps> = ({gameLogic}: AnswerFormProps) => 
             input.current.value = "";
     };
 
-    return (
+    const handleContinue = () => {
+        gameLogic?.continueToNextPhase();
+    }
+
+    if (gameLogic?.gameState === GameState.RUNNING) return (
         <form onSubmit={(e) => e.preventDefault()} className="form">
             {(gameLogic?.startingTeam === WhatTeam.TO_BE_DETERMINED) && (
             <select ref={startingTeam}>
@@ -25,9 +29,14 @@ const AnswerForm: React.FC<AnswerFormProps> = ({gameLogic}: AnswerFormProps) => 
             </select>
             )}
             <input ref={input} type="text" />
-            <button type="submit" className="bg-gray-200" onClick={handleCheck}>Check</button>
+            <button type="submit" className="bg-gray-200 h-full" onClick={handleCheck}>Check</button>
         </form>
     );
+    else if (gameLogic?.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) return (
+        <form onSubmit={(e) => e.preventDefault()} className="form">
+            <button type="submit" className="bg-gray-200 h-full" onClick={handleContinue}>Continue</button>
+        </form>
+    )
 };
 
-export default AnswerForm;
+export default ControlPanel;

@@ -1,7 +1,6 @@
-import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam } from "../Types";
+import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam, GameState } from "../Types";
 import Team from "./Team";
 import { getQuestions } from "../services/QuestionService";
-import { Warning } from "postcss";
 
 export class GameLogic {
     private static instance: GameLogic; 
@@ -17,12 +16,14 @@ export class GameLogic {
                     question,
                     points: 0,
                     leftIntroRestarts: 1,
+                    winner: WhatTeam.TO_BE_DETERMINED
                 };
             }),
             currentRound: 0,
             phase: GamePhase.QUESTION_INTRO,
             currentTeam: WhatTeam.TO_BE_DETERMINED,
             startingTeam: WhatTeam.TO_BE_DETERMINED,
+            gameState: GameState.RUNNING,
         };
     }
 
@@ -59,19 +60,40 @@ export class GameLogic {
      * 
      * @param forceNewRound - If true, the game will always move to the next round.
      */
-    private nextPhase(forceNewRound?: boolean) {
+    private async nextPhase(forceNewRound?: boolean): Promise<void> {
         if (!forceNewRound && this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
             this.gameInfo.phase = GamePhase.QUESTION_MAIN;
             this.gameInfo.currentTeam = this.startingTeam;
         } else if (forceNewRound || this.gameInfo.phase === GamePhase.QUESTION_MAIN) {
-            this.gameInfo.phase = GamePhase.QUESTION_INTRO;
-            this.gameInfo.currentRound += 1;
+            // Set to waiting and wait here for continue button press
+            this.gameInfo.gameState = GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND;
             this.gameInfo.currentTeam = WhatTeam.TO_BE_DETERMINED;
             this.gameInfo.startingTeam = WhatTeam.TO_BE_DETERMINED;
+            // Wait for continue
+            await new Promise<void>((resolve) => {
+                this.waitForContinueResolve = resolve;
+            });
+            this.waitForContinueResolve = null;
+            
+            // Next round
+            this.gameInfo.phase = GamePhase.QUESTION_INTRO;
+            this.gameInfo.currentRound += 1;
         }
         
         this.prepareTeams();
         this.emitUpdate();
+    }
+    
+    // 
+    private waitForContinueResolve: (() => void) | null = null;
+    public continueToNextPhase(): void {
+        if (this.gameInfo.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND && this.waitForContinueResolve) {
+            this.gameInfo.gameState = GameState.RUNNING;
+            this.waitForContinueResolve();
+            this.emitUpdate();
+        } else {
+            throw new Error("Game is not in a waiting state.");
+        }
     }
 
     /**
@@ -124,6 +146,7 @@ export class GameLogic {
         if (answeredByStartingTeam && allAnswersRevealed) {
             // Give all points to the team
             this._currentTeam.appendScore(this.currentRound.points);
+            this.currentRound.winner = this.gameInfo.currentTeam;
             this.nextPhase();
             return;
         }  
@@ -131,6 +154,7 @@ export class GameLogic {
         else if(!answeredByStartingTeam) {
             // Give all points to the team
             this._currentTeam.appendScore(this.currentRound.points);
+            this.currentRound.winner = this.gameInfo.currentTeam;
             this.nextPhase();
             return;
         }
@@ -289,6 +313,16 @@ export class GameLogic {
     public get team1(): Team { return this.gameInfo.team1; }
     public get team2(): Team { return this.gameInfo.team2; }
     public get currentTeam(): WhatTeam { return this.gameInfo.currentTeam; }
+    public get gameState(): GameState { return this.gameInfo.gameState; }
+
+    public getTeamByWhatTeam(whatTeam?: WhatTeam): Team | undefined {
+        if (whatTeam === WhatTeam.TO_BE_DETERMINED || !whatTeam) {
+            console.log("Cannot get team by TO_BE_DETERMINED or undefined. Returning undefined !");
+            return undefined;
+        }
+
+        return whatTeam === WhatTeam.TEAM1 ? this.team1 : this.team2;
+    }
     
     public static async createInstance(): Promise<GameLogic> {
         if (!GameLogic.instance) {

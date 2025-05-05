@@ -3,8 +3,8 @@ import "./Components/GameBoard"
 import GameLogic, { GAME_LOGIC } from "./Classes/GameLogic";
 import { WhatTeam } from "./Types";
 import GameBoard from "./Components/GameBoard";
-import "./Components/AnswerForm"
-import AnswerForm from "./Components/AnswerForm";
+import "./Components/ControlPanel"
+import ControlPanel from "./Components/ControlPanel";
 
 const Game: React.FC = () => {
   // Load game logic
@@ -40,7 +40,7 @@ const Game: React.FC = () => {
           ))}
         </ol>
         <h3>Points: {gameLogic?.currentRound.points}</h3>
-        <AnswerForm gameLogic={gameLogic!} />
+        <ControlPanel gameLogic={gameLogic!} />
         <h3>Faza pytania: {gameLogic?.currentPhase}</h3>
         <h2>Druzyny:</h2>
         <ol>

@@ -7,6 +7,8 @@ export default class Team {
     private whatTeam: WhatTeam;
     private name: string;
 
+    public get getWhatTeam(): WhatTeam { return this.whatTeam; }
+
     constructor(whatTeam: WhatTeam, name?: string) {
         this.name = name || whatTeam;
         this.whatTeam = whatTeam;

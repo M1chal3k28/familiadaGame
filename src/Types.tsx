@@ -39,6 +39,7 @@ export interface Round {
     question: Question;
     points: number;
     leftIntroRestarts: number; // <- number of times left to restart the round in case no one answers in the intro
+    winner: WhatTeam;
 };
 
 export enum WhatTeam {
@@ -46,6 +47,13 @@ export enum WhatTeam {
     TEAM2 = "team2",
     TO_BE_DETERMINED = "to_be_determined",
 }
+
+export enum GameState {
+    RUNNING = "running",
+    FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND = "waiting",
+    ENDED = "ended",
+}
+
 export interface GameInterface {
     team1: Team;
     team2: Team;
@@ -54,9 +62,10 @@ export interface GameInterface {
     phase: GamePhase;
     currentTeam: WhatTeam;
     startingTeam: WhatTeam;
+    gameState: GameState;
 };
 
-export type AnswerFormProps = {
+export type ControlPanelProps = {
     gameLogic?: GameLogic;
 }
 
@@ -74,4 +83,5 @@ export type TeamInfoProps = {
 
 export type TeamXsProps = {
     team?: Team;
+    side: Side;
 };

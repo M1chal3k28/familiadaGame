@@ -8,7 +8,8 @@
         { "code": "prysznic", "score": 12 },
         { "code": "lustro", "score": 8 },
         { "code": "umywalka", "score": 6 },
-        { "code": "szafka", "score": 3 }
+        { "code": "szafka", "score": 3 },
+        { "code": "test", "score": 1 }
       ]
     },
     {
