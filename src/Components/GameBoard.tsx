@@ -41,95 +41,109 @@ const TeamXs: React.FC<TeamXsProps> = ({ team, side }: TeamXsProps) => {
 type AnswerTableProps = {
     round?: Round;
     gameState?: GameState;
+    gameLogic?: GameLogic;
 }
 
-const AnswerTable: React.FC<AnswerTableProps> = ({ round, gameState }: AnswerTableProps) => {
-    if (gameState === GameState.RUNNING) return (
-        <table className="text-green-700 w-full text-7xl">
-            <tbody>
-                {round?.question.answers.map((answer: Answer, index: number) => (
-                    <tr key={index + 1}>
-                        <td className="p-2 w-[10%]">{index + 1}.</td>
-                        <td className="p-2 w-[70%]">{answer.revealed ? answer.code : ".".repeat(10)}</td>
-                        <td className="p-2 w-[20%] text-right">{answer.revealed ? answer.score : "#".repeat(2)}</td>
-                    </tr>
-                ))}
+const AnswerTable: React.FC<AnswerTableProps> = ({ round, gameState, gameLogic }: AnswerTableProps) => {
+    const winner: Team | undefined = useMemo(() => gameLogic?.winningTeam, [gameLogic?.winningTeam]);
+    const isWinnerTeam1 = useMemo(() => winner?.getWhatTeam === WhatTeam.TEAM1, [winner]);
+    const isWinnerTeam2 = useMemo(() => winner?.getWhatTeam === WhatTeam.TEAM2, [winner]);
+    return (
+        <>
+        {gameState !== GameState.ENDED && (
+            <table className="text-green-700 w-full text-7xl">
+                <tbody>
+                    {gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND && (<>
+                        {round?.question.answers.map((answer: Answer, index: number) => (
+                            <tr key={index + 1} className={clsx({ "text-white": !answer?.revealed })}>
+                                <td className="p-2 w-[10%]">{index + 1}.</td>
+                                <td className="p-2 w-[70%]">{answer.code}</td>
+                                <td className="p-2 w-[20%] text-right">{answer.score}</td>
+                            </tr>
+                        ))}
+                    </>)}
+                    {gameState === GameState.RUNNING && (<>
+                        {round?.question.answers.map((answer: Answer, index: number) => (
+                            <tr key={index + 1}>
+                                <td className="p-2 w-[10%]">{index + 1}.</td>
+                                <td className="p-2 w-[70%]">{answer.revealed ? answer.code : ".".repeat(10)}</td>
+                                <td className="p-2 w-[20%] text-right">{answer.revealed ? answer.score : "#".repeat(2)}</td>
+                            </tr>
+                        ))}
+                    </>)}
 
-                <tr key={0} className="text-right">
-                    <td colSpan={3}>Suma: {round?.points}</td>
-                </tr>
-            </tbody>
-        </table>
-    );  
-    else if (gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) return (
-        <table className="text-green-700 w-full text-7xl">
-            <tbody>
-                {round?.question.answers.map((answer: Answer, index: number) => (
-                    <tr key={index + 1} className={clsx({ "text-white": !answer?.revealed })}>
-                        <td className="p-2 w-[10%]">{index + 1}.</td>
-                        <td className="p-2 w-[70%]">{answer.code}</td>
-                        <td className="p-2 w-[20%] text-right">{answer.score}</td>
+                    <tr key={0} className="text-right">
+                        <td colSpan={3}>Suma: {round?.points}</td>
                     </tr>
-                ))}
-
-                <tr key={0} className="text-right">
-                    <td colSpan={3}>Suma: {round?.points}</td>
-                </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        )}
+        {gameState === GameState.ENDED && (
+            <section className="w-auto bg-black p-3 text-white flex justify-center text-5xl">
+                Wygrywa:
+                <span className={clsx("ml-2", { "text-team1": isWinnerTeam1, "text-team2": isWinnerTeam2 })}>
+                    {winner !== undefined && winner.getName}
+                    {winner === undefined && "Nikt"}
+                </span>
+            </section>
+        )}
+        </>
     );
 };
 
-const CurrentPlayerOrWinner: React.FC<{ team?: Team, gameState?: GameState, round?: Round, gameLogic?: GameLogic  }> = ({ team, gameState, round, gameLogic }) => {
-    const isUndefined = useMemo(() => team?.getWhatTeam == WhatTeam.TO_BE_DETERMINED || !team, [team]);
+const GameStatusBanner: React.FC<{ team?: Team, gameState?: GameState, round?: Round, gameLogic?: GameLogic  }> = ({ team, gameState, round, gameLogic }) => {
     const isTeam1 = useMemo(() => team?.getWhatTeam == WhatTeam.TEAM1, [team]);
     const isTeam2 = useMemo(() => team?.getWhatTeam == WhatTeam.TEAM2, [team]);
+    const gameIsRunning = useMemo(() => gameState === GameState.RUNNING, [gameState]);
+    const gameIsWaitingForNextRound = useMemo(() => gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND, [gameState]);
+    const gameIsEnded = useMemo(() => gameState === GameState.ENDED, [gameState]);
 
-    if (gameState === GameState.RUNNING && !isUndefined) return (
+    return (
         <section className="w-auto bg-black p-3 text-white flex justify-center text-5xl rounded-t-md">
-            Odpowiada: 
-            <span className={clsx("ml-2", {"text-sky-500": isTeam1, "text-red-900": isTeam2})}> {team?.getName}</span>
+            {gameIsRunning  &&  "Odpowiada:"}
+            {gameIsWaitingForNextRound &&  "Wygrywa:"}
+            {gameIsEnded && "Koniec Gry !"}
+
+            <span className={clsx("ml-2", {"text-team1": isTeam1, "text-team2": isTeam2})}> 
+                {gameIsRunning && (team?.getName)}
+                {gameIsWaitingForNextRound && 
+                (round?.winner !== WhatTeam.TO_BE_DETERMINED ? gameLogic?.getTeamByWhatTeam(round?.winner)?.getName : "Nikt")
+                }
+            </span>
         </section>
     );
-    else if (gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) return (
-        <section className="w-auto bg-black p-3 text-white flex justify-center text-5xl rounded-t-md">
-            Wygrał Rundę: 
-            <span className={clsx("ml-2", {"text-sky-500": isTeam1, "text-red-900": isTeam2})}>{ round?.winner !== WhatTeam.TO_BE_DETERMINED ? gameLogic?.getTeamByWhatTeam(round?.winner)?.getName : "Nikt"}</span>
-        </section>
-    );
-    else return (
-        <section className="w-auto bg-black p-3 text-white flex justify-center text-5xl rounded-t-md">
-        </section>
-    )
 }
 
 const GameBoard: React.FC<BoardGameProps> = ({ gameLogic }: BoardGameProps) => {
     const isTeam1turn = useMemo(() => gameLogic?.currentTeam === WhatTeam.TEAM1, [gameLogic?.currentTeam]);
     const isTeam2turn = useMemo(() => gameLogic?.currentTeam === WhatTeam.TEAM2, [gameLogic?.currentTeam]);
     const isToBeDetermined = useMemo(() => gameLogic?.currentTeam === WhatTeam.TO_BE_DETERMINED, [gameLogic?.currentTeam]);
+    const isGameEnded = useMemo(() => gameLogic?.gameState === GameState.ENDED, [gameLogic?.gameState]);
 
     return (
         <section className={
             clsx(
                 {
                     'h-svh w-screen font-[PixelFont] bg-gradient-to-r box-border overflow-scroll': true, 
-                    'from-sky-500': isTeam1turn || isToBeDetermined,
-                    'to-red-900':   isTeam2turn || isToBeDetermined,
-                    'from-sky-100': isTeam2turn,
-                    'to-red-100':   isTeam1turn,
+                    'from-team1': isTeam1turn || isToBeDetermined,
+                    'to-team2':   isTeam2turn || isToBeDetermined,
+                    'from-team1light': isTeam2turn,
+                    'to-team2light':   isTeam1turn,
                 }
             )}>
             <section className="flex justify-between">
                 <TeamInfo team={gameLogic?.team1} side="left" />
-                <h1 className="bg-black p-4 text-white flex justify-center text-6xl h-fit ml-3 mr-3 rounded-b-md">{gameLogic?.currentRound.question.question}</h1>
+                {!isGameEnded && 
+                    <h1 className="bg-black p-4 text-white flex justify-center text-6xl h-fit ml-3 mr-3 rounded-b-md">{gameLogic?.currentRound.question.question}</h1>
+                }
                 <TeamInfo team={gameLogic?.team2} side="right" />
             </section>
 
             <section className="w-full h-fit flex flex-col justify-center items-center mt-10">
-                <CurrentPlayerOrWinner team={gameLogic?.getTeamByWhatTeam(gameLogic?.currentTeam)} gameState={gameLogic?.gameState} round={gameLogic?.currentRound} gameLogic={gameLogic!} />
+                <GameStatusBanner team={gameLogic?.getTeamByWhatTeam(gameLogic?.currentTeam)} gameState={gameLogic?.gameState} round={gameLogic?.currentRound} gameLogic={gameLogic!} />
                 <section className="bg-black w-[90%] h-[100%] rounded-md flex justify-center p-10 ml-10 mr-10">
                     <TeamXs team={gameLogic?.team1} side="left"/>
-                    <AnswerTable round={gameLogic?.currentRound} gameState={gameLogic?.gameState} />
+                    <AnswerTable round={gameLogic?.currentRound} gameState={gameLogic?.gameState} gameLogic={gameLogic!} />
                     <TeamXs team={gameLogic?.team2} side="right"/>
                 </section>
                 <ControlPanel gameLogic={gameLogic!} />

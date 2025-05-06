@@ -142,7 +142,11 @@ export class GameLogic {
             
             // Next round
             this.gameInfo.phase = GamePhase.QUESTION_INTRO;
-            this.gameInfo.currentRound += 1;
+            if (this.gameInfo.currentRound === this.gameInfo.rounds.length - 1) {
+                this.gameInfo.gameState = GameState.ENDED;
+            } else {
+                this.gameInfo.currentRound += 1;
+            }
         }
         
         this.prepareTeams();
@@ -409,6 +413,16 @@ export class GameLogic {
     public get gameState(): GameState { return this.gameInfo.gameState; }
     public get canUndo(): boolean { return this.gameHistory.length > 0; }
     public get canRedo(): boolean { return this.redoHistory.length > 0; }
+    
+    /**
+     * The team that is winning, or undefined if the game is not finished and no team is winning.
+     * This is determined by the current score of the teams. If the scores are equal, undefined is returned.
+     */
+    public get winningTeam(): Team | undefined {
+        if (this.team1.getScore > this.team2.getScore) return this.team1;
+        if (this.team2.getScore > this.team1.getScore) return this.team2;
+        return undefined;
+    }
 
     public getTeamByWhatTeam(whatTeam?: WhatTeam): Team | undefined {
         if (whatTeam === WhatTeam.TO_BE_DETERMINED || !whatTeam) {

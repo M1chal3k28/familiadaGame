@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   base: "https://m1chal3k28.github.io/familiadaGame/",
+  build: {
+    sourcemap: false,
+  },
 })
