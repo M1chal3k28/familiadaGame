@@ -124,7 +124,7 @@ const GameBoard: React.FC<BoardGameProps> = ({ gameLogic }: BoardGameProps) => {
         <section className={
             clsx(
                 {
-                    'h-svh w-screen font-[PixelFont] bg-gradient-to-r box-border overflow-scroll': true, 
+                    'h-svh w-screen font-[PixelFont] bg-gradient-to-r box-border overflow-auto': true, 
                     'from-team1': isTeam1turn || isToBeDetermined,
                     'to-team2':   isTeam2turn || isToBeDetermined,
                     'from-team1light': isTeam2turn,
