@@ -20,6 +20,14 @@ const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProp
         gameLogic?.continueToNextPhase();
     }
 
+    const handleUndo = () => {
+        gameLogic?.undoAction();
+    }
+
+    const handleRedo = () => {
+        gameLogic?.redo();
+    }
+
     if (gameLogic?.gameState === GameState.RUNNING) return (
         <form onSubmit={(e) => e.preventDefault()} className="form">
             {(gameLogic?.startingTeam === WhatTeam.TO_BE_DETERMINED) && (
@@ -30,11 +38,15 @@ const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProp
             )}
             <input ref={input} type="text" />
             <button type="submit" className="bg-gray-200 h-full" onClick={handleCheck}>Check</button>
+            <button type="button" className="bg-gray-200 h-full" onClick={handleUndo} {...(gameLogic?.canUndo ? {} : {disabled: true})} >Undo</button>
+            <button type="button" className="bg-gray-200 h-full" onClick={handleRedo} {...(gameLogic?.canRedo ? {} : {disabled: true})} >Redo</button>
         </form>
     );
     else if (gameLogic?.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) return (
         <form onSubmit={(e) => e.preventDefault()} className="form">
             <button type="submit" className="bg-gray-200 h-full" onClick={handleContinue}>Continue</button>
+            <button type="button" className="bg-gray-200 h-full" onClick={handleUndo} {...(gameLogic?.canUndo ? {} : {disabled: true})} >Undo</button>
+            <button type="button" className="bg-gray-200 h-full" onClick={handleRedo} {...(gameLogic?.canRedo ? {} : {disabled: true})} >Redo</button>
         </form>
     )
 };

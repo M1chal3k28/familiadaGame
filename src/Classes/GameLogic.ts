@@ -2,9 +2,16 @@ import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam, GameState 
 import Team from "./Team";
 import { getQuestions } from "../services/QuestionService";
 
+interface GameHistory {
+    gameInfo: GameInterface;
+    roundChanged: boolean;
+}
+
 export class GameLogic {
     private static instance: GameLogic; 
     private gameInfo: GameInterface;
+    private gameHistory: GameHistory[] = [];
+    private redoHistory: GameHistory[] = [];
     private eventTarget: EventTarget = new EventTarget();
 
     private constructor(questions: Question[]) {
@@ -25,6 +32,52 @@ export class GameLogic {
             startingTeam: WhatTeam.TO_BE_DETERMINED,
             gameState: GameState.RUNNING,
         };
+    }
+
+    public undoAction() {
+        if (this.gameHistory.length > 0) {
+            // Save current game info to the redo history
+            this.saveGameInfo(this.redoHistory);
+            
+            // If the game was waiting for continue, resolve with false (undo)
+            if (this.gameInfo.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) {
+                this.waitForContinueResolve!(false);    
+                this.redoHistory[this.redoHistory.length - 1].roundChanged = true;
+            }
+
+            const prev = this.gameHistory.pop()!;
+            this.gameInfo = prev.gameInfo;
+
+            // If the round was changed, move to the next phase (it will wait)
+            if (prev.roundChanged) {
+                this.nextPhase(true);
+            }
+            
+            this.emitUpdate();
+        }
+    }
+
+    public redo() {
+        if (this.redoHistory.length > 0) {
+            // Save current game info to the redo history
+            this.saveGameInfo(this.gameHistory);
+
+            // If the game was waiting for continue, resolve with false (redo)
+            if (this.gameInfo.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) {
+                this.waitForContinueResolve!(false);    
+                this.gameHistory[this.gameHistory.length - 1].roundChanged = true;
+            }
+
+            const prev = this.redoHistory.pop()!;
+            this.gameInfo = prev.gameInfo;
+
+            // If the round was changed, move to the next phase (it will wait)
+            if (prev.roundChanged) {
+                this.nextPhase(true);
+            }
+            
+            this.emitUpdate();
+        }
     }
 
     private prepareTeams() {
@@ -60,7 +113,7 @@ export class GameLogic {
      * 
      * @param forceNewRound - If true, the game will always move to the next round.
      */
-    private async nextPhase(forceNewRound?: boolean): Promise<void> {
+    private async nextPhase(forceNewRound?: boolean): Promise<void> { 
         if (!forceNewRound && this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
             this.gameInfo.phase = GamePhase.QUESTION_MAIN;
             this.gameInfo.currentTeam = this.startingTeam;
@@ -69,11 +122,23 @@ export class GameLogic {
             this.gameInfo.gameState = GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND;
             this.gameInfo.currentTeam = WhatTeam.TO_BE_DETERMINED;
             this.gameInfo.startingTeam = WhatTeam.TO_BE_DETERMINED;
-            // Wait for continue
-            await new Promise<void>((resolve) => {
-                this.waitForContinueResolve = resolve;
+
+            // Wait for continue or undo/redo button
+            const continueGame = await new Promise<boolean>((resolve) => {
+                this.waitForContinueResolve = (val: boolean) => {
+                    resolve(val);
+                };
             });
-            this.waitForContinueResolve = null;
+            if (!continueGame) {
+                // If undo/redo is pressed, don't move to next round after resolving
+                return; 
+            }
+
+            // Save gameInfo before moving to next round to be able to undo to this round if needed
+            this.saveGameInfo(this.gameHistory);
+            this.gameHistory[this.gameHistory.length - 1].roundChanged = true;
+            // Clear redo history
+            this.redoHistory = [];
             
             // Next round
             this.gameInfo.phase = GamePhase.QUESTION_INTRO;
@@ -85,11 +150,11 @@ export class GameLogic {
     }
     
     // 
-    private waitForContinueResolve: (() => void) | null = null;
+    private waitForContinueResolve: ((continueGame: boolean) => void) | null = null;
     public continueToNextPhase(): void {
         if (this.gameInfo.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND && this.waitForContinueResolve) {
             this.gameInfo.gameState = GameState.RUNNING;
-            this.waitForContinueResolve();
+            this.waitForContinueResolve(true);
             this.emitUpdate();
         } else {
             throw new Error("Game is not in a waiting state.");
@@ -281,6 +346,11 @@ export class GameLogic {
      * @param startingTeam - (Optional) The team that starts the round.
      */
     public checkAnswer(answer: string, startingTeam?: WhatTeam) {
+        // Save gameInfo
+        this.saveGameInfo(this.gameHistory);
+        // Clear redo history
+        this.redoHistory = [];
+
         // set starting team
         this.setStartingTeamIfNeeded(startingTeam);
         
@@ -304,6 +374,29 @@ export class GameLogic {
 
         this.emitUpdate();
     }
+    
+    private deepCloneGameInfo(gameInfo: GameInterface): GameInterface {
+        return {
+            ...gameInfo,
+            team1: gameInfo.team1.clone(),
+            team2: gameInfo.team2.clone(),
+            rounds: gameInfo.rounds.map(r => ({
+                ...r,
+                question: {
+                    ...r.question,
+                    answers: r.question.answers.map(a => ({ ...a })),
+                    questionMeta: { ...r.question.questionMeta }
+                }
+            }))
+        };
+    }
+
+    private saveGameInfo(historyToSave?: GameHistory[]) {
+        historyToSave?.push({
+            gameInfo: this.deepCloneGameInfo(this.gameInfo), 
+            roundChanged: false
+        });
+    }
 
     public get GamePhase(): GamePhase { return this.gameInfo.phase; }
     public get currentQuestion(): Question { return this.currentRound.question; }
@@ -314,10 +407,12 @@ export class GameLogic {
     public get team2(): Team { return this.gameInfo.team2; }
     public get currentTeam(): WhatTeam { return this.gameInfo.currentTeam; }
     public get gameState(): GameState { return this.gameInfo.gameState; }
+    public get canUndo(): boolean { return this.gameHistory.length > 0; }
+    public get canRedo(): boolean { return this.redoHistory.length > 0; }
 
     public getTeamByWhatTeam(whatTeam?: WhatTeam): Team | undefined {
         if (whatTeam === WhatTeam.TO_BE_DETERMINED || !whatTeam) {
-            console.log("Cannot get team by TO_BE_DETERMINED or undefined. Returning undefined !");
+            console.warn("Cannot get team by TO_BE_DETERMINED or undefined. Returning undefined !");
             return undefined;
         }
 

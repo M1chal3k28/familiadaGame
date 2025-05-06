@@ -14,6 +14,12 @@ export default class Team {
         this.whatTeam = whatTeam;
     } 
 
+    public clone(): Team { 
+        const newTeam = new Team(this.whatTeam);
+        Object.assign(newTeam, this);
+        return newTeam;
+    }
+    
     public get isBlocked(): boolean {
         return this.xcount >= this.xbound;
     }
