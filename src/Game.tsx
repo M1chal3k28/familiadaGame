@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./Components/GameBoard"
 import GameLogic, { GAME_LOGIC } from "./Classes/GameLogic";
-import { WhatTeam } from "./Types";
+// import { WhatTeam } from "./Types";
 import GameBoard from "./Components/GameBoard";
 import "./Components/ControlPanel"
-import ControlPanel from "./Components/ControlPanel";
+// import ControlPanel from "./Components/ControlPanel";
 
 const Game: React.FC = () => {
   // Load game logic
@@ -32,7 +32,7 @@ const Game: React.FC = () => {
   return (
     <>
       <GameBoard gameLogic={gameLogic!} />
-      <div>
+      {/* <div>
         <h1>{gameLogic?.currentQuestion.question}</h1>
         <ol>
           {gameLogic?.currentQuestion.answers.map((answer, index) => (
@@ -59,7 +59,7 @@ const Game: React.FC = () => {
             </ol>
           </li>
         </ol>
-      </div>
+      </div> */}
     </>
   );
 };
