@@ -9,3 +9,12 @@
     font-size: xx-large;
     src: url("/Minecart_LCD_Polish.ttf");
 }  
+
+@layer components {
+    .btn {
+        @apply bg-black text-white font-bold px-2 py-1 disabled:bg-gray-900 ml-1 mr-1 text-center rounded-b-md transition-transform duration-150 ease-in-out h-10;
+    }
+    .input {
+        @apply bg-black text-white font-bold px-2 py-1 disabled:bg-gray-900 ml-1 mr-1 text-center rounded-b-md transition-transform duration-150 ease-in-out h-10 outline-none;
+    }
+}

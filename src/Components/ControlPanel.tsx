@@ -28,27 +28,37 @@ const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProp
         gameLogic?.redo();
     }
 
-    if (gameLogic?.gameState === GameState.RUNNING) return (
-        <form onSubmit={(e) => e.preventDefault()} className="form">
-            {(gameLogic?.startingTeam === WhatTeam.TO_BE_DETERMINED) && (
-            <select ref={startingTeam}>
-                <option value={WhatTeam.TEAM1}>{gameLogic?.team1.getName}</option>
-                <option value={WhatTeam.TEAM2}>{gameLogic?.team2.getName}</option>
-            </select>
+    return (
+        <form onSubmit={(e) => e.preventDefault()} className="form box-border">
+            {(gameLogic?.gameState === GameState.RUNNING || gameLogic?.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) && (
+            <>
+                {/** When starting team must be set */}
+                {gameLogic?.gameState === GameState.RUNNING && gameLogic?.startingTeam === WhatTeam.TO_BE_DETERMINED && (
+                <select ref={startingTeam} className="btn">
+                    <option value={WhatTeam.TEAM1}>{gameLogic?.team1.getName}</option>
+                    <option value={WhatTeam.TEAM2}>{gameLogic?.team2.getName}</option>
+                </select>
+                )}
+                
+                {/** When game is running */}
+                {gameLogic?.gameState === GameState.RUNNING && (
+                <>
+                    <input ref={input} type="text" className="input" placeholder="Answer..." />
+                    <button type="submit" className="btn h-full" onClick={handleCheck}>Check</button>
+                </>
+                )}
+
+                {/** When game is waiting for continue */}
+                {gameLogic?.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND && (
+                    <button type="submit" className="btn h-full" onClick={handleContinue}>Continue</button>
+                )}
+
+                <button type="button" className="btn h-full" onClick={handleUndo} {...(gameLogic?.canUndo ? {} : {disabled: true})}>Undo</button>
+                <button type="button" className="btn h-full" onClick={handleRedo} {...(gameLogic?.canRedo ? {} : {disabled: true})}>Redo</button>
+            </>
             )}
-            <input ref={input} type="text" />
-            <button type="submit" className="bg-gray-200 h-full" onClick={handleCheck}>Check</button>
-            <button type="button" className="bg-gray-200 h-full" onClick={handleUndo} {...(gameLogic?.canUndo ? {} : {disabled: true})} >Undo</button>
-            <button type="button" className="bg-gray-200 h-full" onClick={handleRedo} {...(gameLogic?.canRedo ? {} : {disabled: true})} >Redo</button>
         </form>
     );
-    else if (gameLogic?.gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND) return (
-        <form onSubmit={(e) => e.preventDefault()} className="form">
-            <button type="submit" className="bg-gray-200 h-full" onClick={handleContinue}>Continue</button>
-            <button type="button" className="bg-gray-200 h-full" onClick={handleUndo} {...(gameLogic?.canUndo ? {} : {disabled: true})} >Undo</button>
-            <button type="button" className="bg-gray-200 h-full" onClick={handleRedo} {...(gameLogic?.canRedo ? {} : {disabled: true})} >Redo</button>
-        </form>
-    )
 };
 
 export default ControlPanel;

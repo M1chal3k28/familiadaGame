@@ -112,28 +112,27 @@ const GameBoard: React.FC<BoardGameProps> = ({ gameLogic }: BoardGameProps) => {
         <section className={
             clsx(
                 {
-                    'h-screen w-screen font-[PixelFont] bg-gradient-to-r': true, 
+                    'h-svh w-screen font-[PixelFont] bg-gradient-to-r box-border overflow-scroll': true, 
                     'from-sky-500': isTeam1turn || isToBeDetermined,
                     'to-red-900':   isTeam2turn || isToBeDetermined,
                     'from-sky-100': isTeam2turn,
                     'to-red-100':   isTeam1turn,
                 }
             )}>
-            <h1 className="bg-black p-4 text-white flex justify-center text-6xl">{gameLogic?.currentRound.question.question}</h1>
-            <section className="flex justify-between h-full">
+            <section className="flex justify-between">
                 <TeamInfo team={gameLogic?.team1} side="left" />
-
-                <section className="w-[70%] h-full flex flex-col justify-center items-center">
-                    <CurrentPlayerOrWinner team={gameLogic?.getTeamByWhatTeam(gameLogic?.currentTeam)} gameState={gameLogic?.gameState} round={gameLogic?.currentRound} gameLogic={gameLogic!} />
-                    <section className="bg-black w-full h-[75%] rounded-md flex justify-center p-10">
-                        <TeamXs team={gameLogic?.team1} side="left"/>
-                        <AnswerTable round={gameLogic?.currentRound} gameState={gameLogic?.gameState} />
-                        <TeamXs team={gameLogic?.team2} side="right"/>
-                    </section>
-                    <ControlPanel gameLogic={gameLogic!} />
-                </section>
-
+                <h1 className="bg-black p-4 text-white flex justify-center text-6xl h-fit ml-3 mr-3 rounded-b-md">{gameLogic?.currentRound.question.question}</h1>
                 <TeamInfo team={gameLogic?.team2} side="right" />
+            </section>
+
+            <section className="w-full h-fit flex flex-col justify-center items-center mt-10">
+                <CurrentPlayerOrWinner team={gameLogic?.getTeamByWhatTeam(gameLogic?.currentTeam)} gameState={gameLogic?.gameState} round={gameLogic?.currentRound} gameLogic={gameLogic!} />
+                <section className="bg-black w-[90%] h-[100%] rounded-md flex justify-center p-10 ml-10 mr-10">
+                    <TeamXs team={gameLogic?.team1} side="left"/>
+                    <AnswerTable round={gameLogic?.currentRound} gameState={gameLogic?.gameState} />
+                    <TeamXs team={gameLogic?.team2} side="right"/>
+                </section>
+                <ControlPanel gameLogic={gameLogic!} />
             </section>
         </section>
     );
