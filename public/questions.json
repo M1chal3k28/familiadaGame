@@ -8,6 +8,22 @@
         { "code": "prysznic", "score": 12 },
         { "code": "lustro", "score": 8 },
         { "code": "umywalka", "score": 6 },
+        { "code": "szafka", "score": 3 },
+        { "code": "szafka", "score": 3 },
+        { "code": "szafka", "score": 3 },
+        { "code": "szafka", "score": 3 },
+        { "code": "szafka", "score": 3 },
+      ]
+    },
+    {
+      "id": 4,
+      "type": "normal",
+      "question": "Z czego korzystamy w łazience?",
+      "answers": [
+        { "code": "wanna", "score": 15 },
+        { "code": "prysznic", "score": 12 },
+        { "code": "lustro", "score": 8 },
+        { "code": "umywalka", "score": 6 },
         { "code": "szafka", "score": 3 }
       ]
     },
