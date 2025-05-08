@@ -40,16 +40,190 @@
       ]
     },
     {
-      "id": 3,
+      "id": 4,
       "type": "normal",
-      "question": "Co robisz rano?",
+      "question": "Wymień produkty spożywcze, które mają na swoim opakowaniu znak %",
       "answers": [
-        { "code": "myję zęby", "score": 13 },
-        { "code": "jem śniadanie", "score": 11 },
-        { "code": "ubieram się", "score": 9 },
-        { "code": "wstaję", "score": 6 },
-        { "code": "idę do pracy", "score": 5 }
+        { "code": "nabiał", "score": 16 },
+        { "code": "alkohol", "score": 20 },
+        { "code": "sok", "score": 9 },
+        { "code": "czekolada", "score": 4 },
+        { "code": "mięso", "score": 1 }
       ]
-    }
+    },
+     {
+      "id": 5,
+      "type": "normal",
+      "question": "Wymień rodzaje trójkątów",
+      "answers": [
+        { "code": "prostokątny", "score": 19 },
+        { "code": "ostrokątny", "score": 12 },
+        { "code": "równoboczny", "score": 6 },
+        { "code": "równoramienny", "score": 9 },
+        { "code": "rozwartokątny", "score": 3 },
+        { "code": "różnoboczny", "score": 1 }
+      ]
+    },
+     {
+      "id": 6,
+      "type": "hard",
+      "question": "Podaj wymiary prostokąta o polu 160",
+      "answers": [
+        { "code": "80x2", "score": 19 },
+        { "code": "40x4", "score": 12 },
+        { "code": "20x8", "score": 9 },
+        { "code": "10x16", "score": 6 },
+        { "code": "5x32", "score": 1 },
+        { "code": "1x160", "score": 3 }
+      ]
+    },
+     {
+      "id": 7,
+      "type": "normal",
+      "question": "Wymień jednostki pojemności",
+      "answers": [
+        { "code": "l", "score": 15 },
+        { "code": "ml", "score": 11 },
+        { "code": "cm^3", "score": 6 },
+        { "code": "dm^3", "score": 9 },
+        { "code": "hl", "score": 5 },
+        { "code": "dl", "score": 3 },
+        { "code": "m^3", "score": 1 }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "normal",
+      "question": "Wymień przedmioty w kształcie prostopadłościanu",
+      "answers": [
+        { "code": "budynek", "score": 18 },
+        { "code": "kostka", "score": 13 },
+        { "code": "pudełko", "score": 15 },
+        { "code": "basen", "score": 7 },
+        { "code": "komputer", "score": 4 },
+        { "code": "książka", "score": 9 },
+        { "code": "gumka do ścierania", "score": 2 },
+        { "code": "meble", "score": 11 },
+        { "code": "ser", "score": 1 }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "normal",
+      "question": "Wymień rodzaje kątów",
+      "answers": [
+        { "code": "ostry", "score": 11 },
+        { "code": "prosty", "score": 15 },
+        { "code": "rozwarty", "score": 9 },
+        { "code": "półpełny", "score": 5 },
+        { "code": "pełny", "score": 6 },
+        { "code": "wklęsły", "score": 3 },
+        { "code": "zerowy", "score": 1 }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "normal",
+      "question": "Podaj wzory na pola wielokątów",
+      "answers": [
+        { "code": "a^2", "score": 19 },
+        { "code": "ab", "score": 12 },
+        { "code": "1/2(ab)", "score": 9 },
+        { "code": "1/2(ef)", "score": 3 },
+        { "code": "ah", "score": 6 },
+        { "code": "1/2((a+b)h)", "score": 1 }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "normal",
+      "question": "Wymień gdzie można spotkać liczby ujemne",
+      "answers": [
+        { "code": "temperatura", "score": 20 },
+        { "code": "depresja", "score": 9 },
+        { "code": "winda", "score": 4 },
+        { "code": "wada wzroku", "score": 1 },
+        { "code": "debet", "score": 16 }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "hard",
+      "question": "Wymień liczby naturalne mniejsze od 1540, których zaokrąglenie do dziesiątek wynosi 1540",
+      "answers": [
+        { "code": "1539", "score": 20 },
+        { "code": "1538", "score": 16 },
+        { "code": "1537", "score": 9 },
+        { "code": "1536", "score": 4 },
+        { "code": "1535", "score": 1 }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "hard",
+      "question": "Podaj wymiary prostopadłościanu o objątości 360, którego jeden wymiar wynosi 10",
+      "answers": [
+        { "code": "6x6x10", "score": 20 },
+        { "code": "4x9x10", "score": 16 },
+        { "code": "2x18x10", "score": 9 },
+        { "code": "3x12x10", "score": 1 },
+        { "code": "1x36x10", "score": 4 }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "normal",
+      "question": "Podaj liczby całkowite, które są większe bądź równe (-2 i 3/4) i mniejsze od 4",
+      "answers": [
+        { "code": "-2", "score": 1 },
+        { "code": "-1", "score": 3 },
+        { "code": "0", "score": 19 },
+        { "code": "1", "score": 12 },
+        { "code": "2", "score": 9 },
+        { "code": "3", "score": 6 }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "hard",
+      "question": "Co można "dodawać", nie sumując.",
+      "answers": [
+        { "code": "odwagi", "score": 7 },
+        { "code": "gazu", "score": 27 },
+        { "code": "lat", "score": 16 }
+      ]
+    },
+    {
+      "id": 16,
+      "type": "normal",
+      "question": "Wymień liczby pierwsze z zakresu 10-20.",
+      "answers": [
+        { "code": "11", "score": 25 },
+        { "code": "13", "score": 14 },
+        { "code": "17", "score": 7 },
+        { "code": "19", "score": 4 }
+      ]
+    },
+    {
+      "id": 17,
+      "type": "normal",
+      "question": "Wymień młodzieżowe słowo roku w latach 2022-2024.",
+      "answers": [
+        { "code": sigma", "score": 27 },
+        { "code": "rel", "score": 7 },
+        { "code": "essa", "score": 16 }
+      ]
+    },
+    {
+      "id": 18,
+      "type": "hard",
+      "question": "Wymień prezydentów Polski po 2000r.",
+      "answers": [
+        { "code": "Andrzej Duda", "score": 25 },
+        { "code": "Bronisław Komorowski", "score": 14 },
+        { "code": "Lech Kaczyński", "score": 7 },
+        { "code": "Aleksander Kwaśniewski", "score": 4 }
+      ]
+    },
   ]
   
