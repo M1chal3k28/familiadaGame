@@ -14,6 +14,11 @@ export default {
         team1: colors.sky[500],
         team1light: colors.sky[100],
         team2light: colors.red[100],
+        boardLcd: colors.green[600]
+      },
+      screens: {
+        '2xs': '400px',
+        'xs': '500px'
       }
     },
   },

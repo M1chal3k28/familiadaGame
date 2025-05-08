@@ -34,6 +34,7 @@ export class GameLogic {
         };
     }
 
+    // TODO: Reverte leftIntroRestarts
     public undoAction() {
         if (this.gameHistory.length > 0) {
             // Save current game info to the redo history
