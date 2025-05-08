@@ -2,41 +2,41 @@
     {
       "id": 1,
       "type": "normal",
-      "question": "Z czego korzystamy w łazience?",
+      "question": "Wymień dzielniki liczby 9828 mniejsze od 10",
       "answers": [
-        { "code": "wanna", "score": 15 },
-        { "code": "prysznic", "score": 12 },
-        { "code": "lustro", "score": 8 },
-        { "code": "umywalka", "score": 6 },
-        { "code": "szafka", "score": 3 },
-        { "code": "szafka1", "score": 4 },
-        { "code": "szafka2", "score": 5 },
-        { "code": "szafka3", "score": 7 },
-        { "code": "szafka4", "score": 9 }
+        { "code": "2", "score": 15 },
+        { "code": "3", "score": 9 },
+        { "code": "9", "score": 5 },
+        { "code": "4", "score": 3 },
+        { "code": "6", "score": 6 },
+        { "code": "7", "score": 1 }
+        
       ]
     },
     {
-      "id": 4,
-      "type": "normal",
-      "question": "Z czego korzystamy w łazience?",
+      "id": 2,
+      "type": "hard",
+      "question": "Zamień powierzchnię 300m^2 na inne jednostki powierzchni ",
       "answers": [
-        { "code": "wanna", "score": 15 },
-        { "code": "prysznic", "score": 12 },
-        { "code": "lustro", "score": 8 },
-        { "code": "umywalka", "score": 6 },
-        { "code": "szafka", "score": 3 }
+        { "code": "3000000cm^2", "score": 6 },
+        { "code": "30000dm^2", "score": 9 },
+        { "code": "3a", "score": 19 },
+        { "code": "0,03ha", "score": 12 },
+        { "code": "300000000mm^2", "score": 1 },
+        { "code": "0,0003km^2", "score": 3 }  
       ]
     },
     {
-      "id": 2, 
-      "type": "hard", 
-      "question": "Czego używamy w kuchni?",
+      "id": 3, 
+      "type": "normal", 
+      "question": "wymień czworokąty",
       "answers": [
-        { "code": "patelnia", "score": 14 },
-        { "code": "nóż", "score": 11 },
-        { "code": "garnek", "score": 10 },
-        { "code": "czajnik", "score": 6 },
-        { "code": "deska do krojenia", "score": 4 }
+        { "code": "kwadrat", "score": 19 },
+        { "code": "prostokąt", "score": 12 },
+        { "code": "równoległobok", "score": 6 },
+        { "code": "romb", "score": 9 },
+        { "code": "trapez", "score": 3 },
+        { "code": "deltoid", "score": 1 }
       ]
     },
     {
