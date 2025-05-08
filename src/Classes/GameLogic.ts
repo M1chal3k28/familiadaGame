@@ -1,6 +1,7 @@
 import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam, GameState } from "../Types";
 import Team from "./Team";
 import { getQuestions } from "../services/QuestionService";
+import Game from "../Game";
 
 interface GameHistory {
     gameInfo: GameInterface;
@@ -234,6 +235,7 @@ export class GameLogic {
         const round = this.currentRound;
         const isBestAnswer = round.question.questionMeta.mostScoredAnswerCode === answerObj.code;
 
+
         // if starting team got best answer
         if (this.gameInfo.startingTeam === this.gameInfo.currentTeam) {
             // check if answer is the best answer
@@ -262,6 +264,7 @@ export class GameLogic {
             // If two answers are revealed check which team got better
             else if (revealed.length === 2)
                 winner = revealed[0].score > revealed[1].score ? revealed[0].revealedByTeam! : revealed[1].revealedByTeam!;
+            
 
             // Set starting team for main phase
             this.gameInfo.startingTeam = winner;
@@ -315,6 +318,14 @@ export class GameLogic {
 
         const teamToSwitchTo = this.gameInfo.currentTeam === WhatTeam.TEAM1 ? WhatTeam.TEAM2 : WhatTeam.TEAM1;
         const team: Team = teamToSwitchTo === WhatTeam.TEAM1 ? this.gameInfo.team1 : this.gameInfo.team2;
+
+        const secondTeamGotWrongAnswerAndPhaseShouldChange = this.gameInfo.phase === GamePhase.QUESTION_INTRO && teamToSwitchTo === this.gameInfo.startingTeam;
+        if (secondTeamGotWrongAnswerAndPhaseShouldChange) {
+            // Next phase
+            this.nextPhase();
+            return;
+        }
+
         if (team.isBlocked) {
             // Check if intro phase
             if (this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
