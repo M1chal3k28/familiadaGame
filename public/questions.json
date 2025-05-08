@@ -209,7 +209,7 @@
       "type": "normal",
       "question": "Wymień młodzieżowe słowo roku w latach 2022-2024.",
       "answers": [
-        { "code": sigma", "score": 27 },
+        { "code": "sigma", "score": 27 },
         { "code": "rel", "score": 7 },
         { "code": "essa", "score": 16 }
       ]
@@ -224,6 +224,6 @@
         { "code": "Lech Kaczyński", "score": 7 },
         { "code": "Aleksander Kwaśniewski", "score": 4 }
       ]
-    },
+    }
   ]
   
