@@ -1,7 +1,7 @@
 import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam, GameState } from "../Types";
 import Team from "./Team";
 import { getQuestions } from "../services/QuestionService";
-import Game from "../Game";
+// import Game from "../Game";
 
 interface GameHistory {
     gameInfo: GameInterface;

@@ -3,7 +3,7 @@ import "./Components/GameBoard"
 import GameLogic, { GAME_LOGIC } from "./Classes/GameLogic";
 // import { WhatTeam } from "./Types";
 import GameBoard from "./Components/GameBoard";
-import "./Components/ControlPanel"
+// import "./Components/ControlPanel"
 // import ControlPanel from "./Components/ControlPanel";
 
 const Game: React.FC = () => {
