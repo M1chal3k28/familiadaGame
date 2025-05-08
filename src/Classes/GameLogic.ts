@@ -35,7 +35,6 @@ export class GameLogic {
         };
     }
 
-    // TODO: Reverte leftIntroRestarts
     public undoAction() {
         if (this.gameHistory.length > 0) {
             // Save current game info to the redo history
@@ -319,13 +318,7 @@ export class GameLogic {
         const teamToSwitchTo = this.gameInfo.currentTeam === WhatTeam.TEAM1 ? WhatTeam.TEAM2 : WhatTeam.TEAM1;
         const team: Team = teamToSwitchTo === WhatTeam.TEAM1 ? this.gameInfo.team1 : this.gameInfo.team2;
 
-        const secondTeamGotWrongAnswerAndPhaseShouldChange = this.gameInfo.phase === GamePhase.QUESTION_INTRO && teamToSwitchTo === this.gameInfo.startingTeam;
-        if (secondTeamGotWrongAnswerAndPhaseShouldChange) {
-            // Next phase
-            this.nextPhase();
-            return;
-        }
-
+        
         if (team.isBlocked) {
             // Check if intro phase
             if (this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
@@ -339,6 +332,14 @@ export class GameLogic {
             
             // Next round
             this.nextPhase(true);
+            return;
+        }
+        
+        // It must be after previous if statement to allow round restart
+        const secondTeamGotWrongAnswerAndPhaseShouldChange = this.gameInfo.phase === GamePhase.QUESTION_INTRO && teamToSwitchTo === this.gameInfo.startingTeam;
+        if (secondTeamGotWrongAnswerAndPhaseShouldChange) {
+            // Next phase
+            this.nextPhase();
             return;
         }
 
