@@ -186,7 +186,7 @@
     {
       "id": 15,
       "type": "hard",
-      "question": "Co można "dodawać", nie sumując.",
+      "question": "Co można 'dodawać', nie sumując.",
       "answers": [
         { "code": "odwagi", "score": 7 },
         { "code": "gazu", "score": 27 },
