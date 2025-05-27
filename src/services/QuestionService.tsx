@@ -63,8 +63,12 @@ const prepareQuestions = (array: Question[]): Question[] => {
     const processed = array.map((q) => ({
         ...q,
         answers: sortAnswersByScore(q.answers),
-        questionMeta: getQuestionMeta(q)
     }));
+
+    processed.map((q) => {
+        q.questionMeta = getQuestionMeta(q);
+    });
+
     return sortByIdAndType(processed);
 };
 
@@ -122,7 +126,7 @@ export const getQuestionMeta = (question: Question): QuestionMeta => {
         ? question.answers.reduce((a: Answer, b: Answer) => a.code.length > b.code.length ? a : b).code.length
         : 0;
 
-    // Get the code of the answer with the highest score
+    // Get code of the most scored answer
     const mostScoredAnswerCode = question.answers.length > 0
         ? question.answers[0].code
         : "";

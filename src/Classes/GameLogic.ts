@@ -448,7 +448,7 @@ export class GameLogic {
     
     public static async createInstance(): Promise<GameLogic> {
         if (!GameLogic.instance) {
-            const questions = await getQuestions(); // <- może być async
+            const questions = await getQuestions();
             GameLogic.instance = new GameLogic(questions);
         }
         return GameLogic.instance;
