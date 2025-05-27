@@ -102,9 +102,8 @@
         { "code": "basen", "score": 7 },
         { "code": "komputer", "score": 4 },
         { "code": "książka", "score": 9 },
-        { "code": "gumka do ścierania", "score": 2 },
         { "code": "meble", "score": 11 },
-        { "code": "ser", "score": 1 }
+        { "code": "cegła", "score": 2 }
       ]
     },
     {
@@ -128,7 +127,7 @@
       "answers": [
         { "code": "a^2", "score": 19 },
         { "code": "ab", "score": 12 },
-        { "code": "1/2(ab)", "score": 9 },
+        { "code": "1/2(ah)", "score": 9 },
         { "code": "1/2(ef)", "score": 3 },
         { "code": "ah", "score": 6 },
         { "code": "1/2((a+b)h)", "score": 1 }
