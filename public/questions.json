@@ -213,16 +213,6 @@
         { "code": "essa", "score": 16 }
       ]
     },
-    {
-      "id": 18,
-      "type": "hard",
-      "question": "Wymień prezydentów Polski po 2000r.",
-      "answers": [
-        { "code": "Andrzej Duda", "score": 25 },
-        { "code": "Bronisław Komorowski", "score": 14 },
-        { "code": "Lech Kaczyński", "score": 7 },
-        { "code": "Aleksander Kwaśniewski", "score": 4 }
-      ]
-    }
+
   ]
   
