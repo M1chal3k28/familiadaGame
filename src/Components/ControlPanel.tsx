@@ -1,9 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { WhatTeam, ControlPanelProps, GameState } from "../Types";
+import clsx from "clsx";
 
 const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProps) => {
     const input = useRef<HTMLInputElement>(null);
     const startingTeam = useRef<HTMLSelectElement>(null);
+    const [selectedTeam, setSelectedTeam] = useState<WhatTeam>(WhatTeam.TEAM1);
 
     // Handle answer check
     const handleCheck = () => {
@@ -32,11 +34,21 @@ const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProp
         
     }
 
+    const handleSetStartingTeam = () => {
+        setSelectedTeam(startingTeam.current?.value as WhatTeam);
+    };
+
     return (
         <form onSubmit={(e) => e.preventDefault()} className="form box-border w-auto flex flex-row relative">
             {/** When starting team must be set */}
             {gameLogic?.gameState === GameState.RUNNING && gameLogic?.startingTeam === WhatTeam.TO_BE_DETERMINED && (
-            <select ref={startingTeam} className="btn inputTextSize input box-border">
+            <select ref={startingTeam} onChange={handleSetStartingTeam} className={clsx(
+                    "btn inputTextSize input box-border", 
+                    {
+                        "text-team1": selectedTeam === WhatTeam.TEAM1, 
+                        "text-team2": selectedTeam === WhatTeam.TEAM2
+                    }
+                )}>
                 <option value={WhatTeam.TEAM1}>{gameLogic?.team1.getName}</option>
                 <option value={WhatTeam.TEAM2}>{gameLogic?.team2.getName}</option>
             </select>

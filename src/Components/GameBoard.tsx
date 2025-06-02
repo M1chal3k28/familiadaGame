@@ -92,8 +92,8 @@ const AnswerTable: React.FC<AnswerTableProps> = ({ round, gameState, gameLogic }
 };
 
 const GameStatusBanner: React.FC<{ team?: Team, gameState?: GameState, round?: Round, gameLogic?: GameLogic  }> = ({ team, gameState, round, gameLogic }) => {
-    const isTeam1 = useMemo(() => team?.getWhatTeam == WhatTeam.TEAM1, [team]);
-    const isTeam2 = useMemo(() => team?.getWhatTeam == WhatTeam.TEAM2, [team]);
+    const isTeam1 = useMemo(() => team?.getWhatTeam == WhatTeam.TEAM1 || round?.winner == WhatTeam.TEAM1, [team]);
+    const isTeam2 = useMemo(() => team?.getWhatTeam == WhatTeam.TEAM2 || round?.winner == WhatTeam.TEAM2, [team]);
     const gameIsRunning = useMemo(() => gameState === GameState.RUNNING, [gameState]);
     const gameIsWaitingForNextRound = useMemo(() => gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND, [gameState]);
     const gameIsEnded = useMemo(() => gameState === GameState.ENDED, [gameState]);
