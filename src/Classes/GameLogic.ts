@@ -371,9 +371,19 @@ export class GameLogic {
         // set starting team
         this.setStartingTeamIfNeeded(startingTeam);
         
+        const isIntro = this.gameInfo.phase === GamePhase.QUESTION_INTRO;
+        const isMain = this.gameInfo.phase === GamePhase.QUESTION_MAIN;
+
+        // check if answer was submitted by other team
+        const answerSubmittedByOtherTeam = this.gameInfo.currentTeam !== this.gameInfo.startingTeam
+
         // find answer
         const answerObj: Answer | undefined = this.currentQuestion.answers.find((a) => a.code === answer);
         if (!answerObj || answerObj.revealed) {
+            // This must be before next round
+            if (answerSubmittedByOtherTeam && !isIntro) this.givePointsToStartingTeam();
+
+            // This may call next round
             this.giveXToTheTeam();
             return;
         }
@@ -381,15 +391,26 @@ export class GameLogic {
         this.revealAnswer(answerObj);
 
         // if main phase
-        if (this.gameInfo.phase === GamePhase.QUESTION_MAIN) {
+        if (isMain) {
             this.handleMainPhaseAnswer();
         }
         // else if intro phase
-        else if (this.gameInfo.phase === GamePhase.QUESTION_INTRO) {
+        else if (isIntro) {
             this.handleIntroPhaseAnswer(answerObj);
         }
 
         this.emitUpdate();
+    }
+
+    /**
+     * Gives the current round points to the starting team.
+     * 
+     * The points are given to the team that started the round.
+     * This method is used when the other team submits an incorrect answer.
+     */
+    private givePointsToStartingTeam() {
+        this.getTeamByWhatTeam(this.gameInfo.startingTeam)?.appendScore(this.currentRound.points);
+        this.currentRound.winner = this.gameInfo.startingTeam;
     }
     
     private deepCloneGameInfo(gameInfo: GameInterface): GameInterface {
