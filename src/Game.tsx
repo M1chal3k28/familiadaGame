@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Components/GameBoard"
-import GameLogic, { GAME_LOGIC } from "./Classes/GameLogic";
+import GameLogic from "./Classes/GameLogic";
 // import { WhatTeam } from "./Types";
 import GameBoard from "./Components/GameBoard";
 // import "./Components/ControlPanel"
@@ -10,7 +10,9 @@ const Game: React.FC = () => {
   // Load game logic
   const [gameLogic, setGameLogic] = useState<GameLogic | null>(null);
   useEffect(() => {
-    GAME_LOGIC.then(setGameLogic);
+    GameLogic.createInstance().then((gameLogic) => {
+      setGameLogic(gameLogic);  
+    });
   }, []);
 
   // To force rerender
