@@ -9,7 +9,6 @@ interface GameHistory {
 }
 
 export class GameLogic {
-    private static instance: GameLogic; 
     private gameInfo: GameInterface;
     private gameHistory: GameHistory[] = [];
     private redoHistory: GameHistory[] = [];
@@ -467,12 +466,13 @@ export class GameLogic {
         return whatTeam === WhatTeam.TEAM1 ? this.team1 : this.team2;
     }
     
+    /**
+     * Creates a new instance of the GameLogic class with questions fetched from the API.
+     * @returns A new GameLogic instance.
+     */
     public static async createInstance(): Promise<GameLogic> {
-        if (!GameLogic.instance) {
-            const questions = await getQuestions();
-            GameLogic.instance = new GameLogic(questions);
-        }
-        return GameLogic.instance;
+        const questions = await getQuestions();
+        return new GameLogic(questions);
     }
 
     /**
@@ -489,4 +489,3 @@ export class GameLogic {
 }
 
 export default GameLogic;
-export const GAME_LOGIC: Promise<GameLogic> = GameLogic.createInstance();
