@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./Components/GameBoard"
 import GameLogic from "./Classes/GameLogic";
 // import { WhatTeam } from "./Types";
@@ -16,14 +16,13 @@ const Game: React.FC = () => {
   }, []);
 
   // To force rerender
-  const [_, rerender] = useState(0);
-
+  const [_, forceRerender] = useReducer((x) => x + 1, 0);
   // Add event listener to game logic
   useEffect(() => {
     if (!gameLogic) return; // Ensure gameLogic is defined
   
     const unsubscribe = gameLogic.onUpdate(() => {
-      rerender((_) => _ + 1); // forces rerender
+      forceRerender(); // forces rerender
     });
   
     return () => {

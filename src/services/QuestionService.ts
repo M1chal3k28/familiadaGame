@@ -95,12 +95,6 @@ export const setQuestions = (questions: Question[]) => {
 export const initQuestions = async (): Promise<void> => {
     // TODO: Make this load only once
     // Load from json (for now)
-    // const saved = localStorage.getItem(STORAGE_KEY);
-    // if (!saved) {
-    //     const res = await fetch(`/${STORAGE_KEY}.json`);
-    //     const data = await res.json();
-    //     setQuestions(data);
-    // }
 
     const res = await fetch(`${import.meta.env.BASE_URL}${STORAGE_KEY}.json`);
     const data = await res.json();

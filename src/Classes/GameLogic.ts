@@ -296,10 +296,7 @@ export class GameLogic {
         throw new Error("Current team is not set");
     }
 
-    private emitUpdate() {
-        this.eventTarget.dispatchEvent(new Event("update"));
-    }
-
+    
     /**
      * Attempts to switch the current team to the other team.
      * If the team that we want to switch to is blocked, it checks if we are in the intro phase.
@@ -307,16 +304,16 @@ export class GameLogic {
      * If not, it goes to the next round.
      * If we are not in the intro phase, it just goes to the next round.
      * If the team that we want to switch to is not blocked, it switches to that team.
-     */
+    */
     private tryToSwitchTeams(): void {
-        if (this.gameInfo.currentTeam === WhatTeam.TO_BE_DETERMINED) { 
-            console.warn("Current team is not set Aborting team switch.");
-            return;
+       if (this.gameInfo.currentTeam === WhatTeam.TO_BE_DETERMINED) { 
+           console.warn("Current team is not set Aborting team switch.");
+           return;
         }
-
+        
         const teamToSwitchTo = this.gameInfo.currentTeam === WhatTeam.TEAM1 ? WhatTeam.TEAM2 : WhatTeam.TEAM1;
         const team: Team = teamToSwitchTo === WhatTeam.TEAM1 ? this.gameInfo.team1 : this.gameInfo.team2;
-
+        
         
         if (team.isBlocked) {
             // Check if intro phase
@@ -341,12 +338,12 @@ export class GameLogic {
             this.nextPhase();
             return;
         }
-
+        
         // Switch team
         this.gameInfo.currentTeam = teamToSwitchTo;
         this.emitUpdate();
     }
-
+    
     /** PUBLIC METHODS */
     /**
      * Processes an answer submission and updates the game state accordingly.
@@ -360,35 +357,35 @@ export class GameLogic {
      * 
      * @param answer - The submitted answer to be checked.
      * @param startingTeam - (Optional) The team that starts the round.
-     */
+    */
     public checkAnswer(answer: string, startingTeam?: WhatTeam) {
-        // Save gameInfo
-        this.saveGameInfo(this.gameHistory);
-        // Clear redo history
-        this.redoHistory = [];
-
-        // set starting team
-        this.setStartingTeamIfNeeded(startingTeam);
-        
-        const isIntro = this.gameInfo.phase === GamePhase.QUESTION_INTRO;
-        const isMain = this.gameInfo.phase === GamePhase.QUESTION_MAIN;
-
-        // check if answer was submitted by other team
-        const answerSubmittedByOtherTeam = this.gameInfo.currentTeam !== this.gameInfo.startingTeam
-
-        // find answer
-        const answerObj: Answer | undefined = this.currentQuestion.answers.find((a) => a.code === answer);
-        if (!answerObj || answerObj.revealed) {
-            // This must be before next round
-            if (answerSubmittedByOtherTeam && !isIntro) this.givePointsToStartingTeam();
-
-            // This may call next round
-            this.giveXToTheTeam();
-            return;
+       // Save gameInfo
+       this.saveGameInfo(this.gameHistory);
+       // Clear redo history
+       this.redoHistory = [];
+       
+       // set starting team
+       this.setStartingTeamIfNeeded(startingTeam);
+       
+       const isIntro = this.gameInfo.phase === GamePhase.QUESTION_INTRO;
+       const isMain = this.gameInfo.phase === GamePhase.QUESTION_MAIN;
+       
+       // check if answer was submitted by other team
+       const answerSubmittedByOtherTeam = this.gameInfo.currentTeam !== this.gameInfo.startingTeam
+       
+       // find answer
+       const answerObj: Answer | undefined = this.currentQuestion.answers.find((a) => a.code === answer);
+       if (!answerObj || answerObj.revealed) {
+           // This must be before next round
+           if (answerSubmittedByOtherTeam && !isIntro) this.givePointsToStartingTeam();
+           
+           // This may call next round
+           this.giveXToTheTeam();
+           return;
         }
-
+        
         this.revealAnswer(answerObj);
-
+        
         // if main phase
         if (isMain) {
             this.handleMainPhaseAnswer();
@@ -397,19 +394,19 @@ export class GameLogic {
         else if (isIntro) {
             this.handleIntroPhaseAnswer(answerObj);
         }
-
+        
         this.emitUpdate();
     }
-
+    
     /**
      * Gives the current round points to the starting team.
      * 
      * The points are given to the team that started the round.
      * This method is used when the other team submits an incorrect answer.
-     */
+    */
     private givePointsToStartingTeam() {
-        this.getTeamByWhatTeam(this.gameInfo.startingTeam)?.appendScore(this.currentRound.points);
-        this.currentRound.winner = this.gameInfo.startingTeam;
+       this.getTeamByWhatTeam(this.gameInfo.startingTeam)?.appendScore(this.currentRound.points);
+       this.currentRound.winner = this.gameInfo.startingTeam;
     }
     
     private deepCloneGameInfo(gameInfo: GameInterface): GameInterface {
@@ -427,14 +424,14 @@ export class GameLogic {
             }))
         };
     }
-
+    
     private saveGameInfo(historyToSave?: GameHistory[]) {
         historyToSave?.push({
             gameInfo: this.deepCloneGameInfo(this.gameInfo), 
             roundChanged: false
         });
     }
-
+    
     public get GamePhase(): GamePhase { return this.gameInfo.phase; }
     public get currentQuestion(): Question { return this.currentRound.question; }
     public get currentRound(): Round { return this.gameInfo.rounds[this.gameInfo.currentRound]; }
@@ -450,31 +447,31 @@ export class GameLogic {
     /**
      * The team that is winning, or undefined if the game is not finished and no team is winning.
      * This is determined by the current score of the teams. If the scores are equal, undefined is returned.
-     */
+    */
     public get winningTeam(): Team | undefined {
-        if (this.team1.getScore > this.team2.getScore) return this.team1;
-        if (this.team2.getScore > this.team1.getScore) return this.team2;
-        return undefined;
+       if (this.team1.getScore > this.team2.getScore) return this.team1;
+       if (this.team2.getScore > this.team1.getScore) return this.team2;
+       return undefined;
     }
-
+    
     public getTeamByWhatTeam(whatTeam?: WhatTeam): Team | undefined {
         if (whatTeam === WhatTeam.TO_BE_DETERMINED || !whatTeam) {
             console.warn("Cannot get team by TO_BE_DETERMINED or undefined. Returning undefined !");
             return undefined;
         }
-
+        
         return whatTeam === WhatTeam.TEAM1 ? this.team1 : this.team2;
     }
     
     /**
      * Creates a new instance of the GameLogic class with questions fetched from the API.
      * @returns A new GameLogic instance.
-     */
+    */
     public static async createInstance(): Promise<GameLogic> {
-        const questions = await getQuestions();
-        return new GameLogic(questions);
+       const questions = await getQuestions();
+       return new GameLogic(questions);
     }
-
+    
     /**
      * Register a callback to be called whenever the game state changes.
      * Returns a function that can be called to remove the callback.
@@ -485,6 +482,9 @@ export class GameLogic {
        const handler = () => callback();
        this.eventTarget.addEventListener("update", handler);
        return () => this.eventTarget.removeEventListener("update", handler); // cleanup
+    }
+    private emitUpdate() {
+        this.eventTarget.dispatchEvent(new Event("update"));
     }
 }
 
