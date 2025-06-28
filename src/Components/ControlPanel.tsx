@@ -1,11 +1,14 @@
 import { useRef, useState } from "react";
 import { WhatTeam, ControlPanelProps, GameState } from "../Types";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
+import { BASE_PATH } from "../PathConfig";
 
 const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProps) => {
     const input = useRef<HTMLInputElement>(null);
     const startingTeam = useRef<HTMLSelectElement>(null);
     const [selectedTeam, setSelectedTeam] = useState<WhatTeam>(WhatTeam.TEAM1);
+    const navigator = useNavigate();
 
     // Handle answer check
     const handleCheck = () => {
@@ -32,6 +35,11 @@ const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProp
 
     const handleRestart = () => {
         
+    }
+
+    const handleMenu = () => {
+        if (!confirm("Are you sure you want to abort current game ?")) return;
+        navigator(BASE_PATH);
     }
 
     const handleSetStartingTeam = () => {
@@ -74,6 +82,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({gameLogic}: ControlPanelProp
 
             <button type="button" className="btn h-full inputTextSize" onClick={handleUndo} {...(gameLogic?.canUndo ? {} : {disabled: true})}>Undo</button>
             <button type="button" className="btn h-full inputTextSize" onClick={handleRedo} {...(gameLogic?.canRedo ? {} : {disabled: true})}>Redo</button>
+            <button type="button" className="btn h-full inputTextSize" onClick={handleMenu}>Menu</button>
         </form>
     );
 };
