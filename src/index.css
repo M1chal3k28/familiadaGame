@@ -28,10 +28,10 @@
     }
 
     .btn {
-        @apply bg-black text-white font-bold px-0.5 sm:px-2 py-1 disabled:bg-gray-900 ml-0.5 mr-0.5 sm:ml-1 sm:mr-1 text-center xs:rounded-b-sm sm:rounded-b-md transition-transform duration-150 ease-in-out h-full;
+        @apply bg-black text-white font-bold px-0.5 sm:px-2 py-1 disabled:bg-gray-900 ml-0.5 mr-0.5 sm:ml-1 sm:mr-1 text-center xs:rounded-b-sm sm:rounded-b-md transition-transform duration-150 ease-in-out h-full hover:scale-x-95 disabled:scale-100;
     }
     .input {
-        @apply bg-black text-white font-bold px-0.5 sm:px-2 py-1 disabled:bg-gray-900 ml-0.5 mr-0.5 sm:ml-1 sm:mr-1 text-center xs:rounded-b-sm sm:rounded-b-md transition-transform duration-150 ease-in-out h-full outline-none;
+        @apply bg-black text-white font-bold px-0.5 sm:px-2 py-1 disabled:bg-gray-900 ml-0.5 mr-0.5 sm:ml-1 sm:mr-1 text-center xs:rounded-b-sm sm:rounded-b-md transition-transform duration-150 ease-in-out h-full outline-none hover:scale-x-95;
     }
     .myTextSize {
         @apply text-2xs 2xs:text-3xs xs:text-2xs sm:text-xs md:text-xl xl:text-2xl 2xl:text-6xl
@@ -44,5 +44,9 @@
     }
     .xSize {
         @apply text-xs xs:text-sm sm:text-lg md:text-3xl xl:text-7xl 2xl:text-9xl
+    }
+
+    .menuButton {
+        @apply text-white font-bold p-5 rounded-2xl disabled:bg-gray-900 text-center transition-transform duration-150 ease-in-out hover:scale-110 disabled:scale-100;
     }
 }
