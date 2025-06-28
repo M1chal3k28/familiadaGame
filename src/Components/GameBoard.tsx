@@ -51,7 +51,7 @@ const AnswerTable: React.FC<AnswerTableProps> = ({ round, gameState, gameLogic }
     return (
         <>
         {gameState !== GameState.ENDED && (
-            <table className="text-boardLcd w-full boardTextSize">
+            <table className="text-boardLcd w-full boardTextSize z-10">
                 <tbody>
                     {gameState === GameState.FINISHED_QUESTION_WAITING_FOR_NEXT_ROUND && (<>
                         {round?.question.answers.map((answer: Answer, index: number) => (
