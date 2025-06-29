@@ -4,8 +4,11 @@ import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './Game'
 import Game from './Game';
-import MainMenu from './Components/MainMenu.tsx';
-import { BASE_PATH, PLAY_PATH } from './PathConfig.tsx';
+import MenuContainer from './Components/Menu/MenuContainer.tsx';
+import { BASE_PATH, PLAY_PATH, SETTINGS_PATH } from './PathConfig.tsx';
+import { SettingsProvider } from './SettingsContext.tsx';
+import MainMenu from './Components/Menu/MainMenu.tsx';
+import SettingsMenu from './Components/Menu/SettingsMenu.tsx';
 
 const router = createBrowserRouter([
   {
@@ -14,7 +17,17 @@ const router = createBrowserRouter([
     children: [
       {
         path: BASE_PATH,
-        element: <MainMenu/>
+        element: <MenuContainer/>,
+        children: [
+          {
+            path: BASE_PATH,
+            element: <MainMenu/>
+          },
+          {
+            path: SETTINGS_PATH,
+            element: <SettingsMenu/>
+          }
+        ]
       },
       {
         path: PLAY_PATH,
@@ -26,6 +39,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <SettingsProvider>
+      <RouterProvider router={router}/>
+    </SettingsProvider>
   </StrictMode>,
 );

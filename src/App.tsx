@@ -30,9 +30,7 @@ function App() {
 
 
   return (
-    <>
       <Outlet />
-    </>
   );
 };
 

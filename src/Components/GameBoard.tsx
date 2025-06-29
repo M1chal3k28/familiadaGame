@@ -99,7 +99,7 @@ const GameStatusBanner: React.FC<{ team?: Team, gameState?: GameState, round?: R
     const gameIsEnded = useMemo(() => gameState === GameState.ENDED, [gameState]);
 
     return (
-        <section className="w-auto bg-black p-1 rounded-t-sm sm:p-3 sm:rounded-t-md flex justify-center myTextSize">
+        <section className="w-auto bg-black p-1 rounded-t-sm sm:p-3 sm:rounded-t-md flex justify-center myTextSize z-10">
             <span className="text-white">
                 {gameIsRunning  &&  "Odpowiada:"}
                 {gameIsWaitingForNextRound &&  "Wygrywa:"}
@@ -118,6 +118,7 @@ const GameStatusBanner: React.FC<{ team?: Team, gameState?: GameState, round?: R
     );
 }
 
+import "../index.css"
 const GameBoard: React.FC<BoardGameProps> = ({ gameLogic }: BoardGameProps) => {
     const isTeam1turn = useMemo(() => gameLogic?.currentTeam === WhatTeam.TEAM1, [gameLogic?.currentTeam]);
     const isTeam2turn = useMemo(() => gameLogic?.currentTeam === WhatTeam.TEAM2, [gameLogic?.currentTeam]);

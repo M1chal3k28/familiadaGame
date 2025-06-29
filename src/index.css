@@ -49,4 +49,16 @@
     .menuButton {
         @apply text-white font-bold p-5 rounded-2xl disabled:bg-gray-900 text-center transition-transform duration-150 ease-in-out hover:scale-110 disabled:scale-100;
     }
+
+    .menuHeader {
+        @apply w-full h-2/6 flex justify-center items-center boardTextSize text-white
+    }
+
+    .menuMain {
+        @apply w-full h-3/6 flex gap-y-10 items-center flex-col align-middle
+    }
+
+    .menuFooter {
+        @apply w-full h-1/6 fixed bottom-0 box-border flex flex-col justify-center items-center text-white
+    }
 }
