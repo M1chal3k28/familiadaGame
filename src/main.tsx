@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import './Game'
 import Game from './Game';
 import MenuContainer from './Components/Menu/MenuContainer.tsx';
@@ -10,7 +10,7 @@ import { SettingsProvider } from './SettingsContext.tsx';
 import MainMenu from './Components/Menu/MainMenu.tsx';
 import SettingsMenu from './Components/Menu/SettingsMenu.tsx';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: BASE_PATH,
     element: <App/>,
@@ -35,7 +35,10 @@ const router = createBrowserRouter([
       }
     ]
   }
-])
+]);
+
+console.log(BASE_PATH);
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
