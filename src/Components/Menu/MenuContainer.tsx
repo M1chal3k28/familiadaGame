@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
 import Particles from "@tsparticles/react";
