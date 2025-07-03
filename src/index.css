@@ -59,6 +59,6 @@
     }
 
     .menuFooter {
-        @apply w-full h-1/6 fixed bottom-0 box-border flex flex-col justify-center items-center text-white
+        @apply w-full h-1/6 box-border flex flex-col justify-center items-center text-white
     }
 }
