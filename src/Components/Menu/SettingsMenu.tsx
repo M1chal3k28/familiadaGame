@@ -10,7 +10,7 @@ const SettingsMenu: React.FC = () => {
     const toggleBgReactionButton = useRef<HTMLButtonElement>(null);
     let particlesContainer: ReturnType<typeof tsParticles.domItem>
 
-    const { particlesMovement, particlesMouseReaction, toggleParticlesMovement, toggleParticlesMouseReaction } = useSettings();
+    const { particlesMovement, particlesMouseReaction, toggleParticlesMovement, toggleParticlesMouseReaction } = useSettings()!;
     const toggleBgMovement = () => {
         if (!particlesContainer) particlesContainer = tsParticles.domItem(0);
 

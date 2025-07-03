@@ -5,7 +5,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import './Game'
 import Game from './Game';
 import MenuContainer from './Components/Menu/MenuContainer.tsx';
-import { BASE_PATH, PLAY_PATH, SETTINGS_PATH } from './PathConfig.tsx';
+import { BASE_PATH, PLAY_PATH, QUESTIONS_PANEL, SETTINGS_PATH } from './PathConfig.tsx';
 import { SettingsProvider } from './SettingsContext.tsx';
 import MainMenu from './Components/Menu/MainMenu.tsx';
 import SettingsMenu from './Components/Menu/SettingsMenu.tsx';
@@ -26,6 +26,10 @@ const router = createHashRouter([
           {
             path: SETTINGS_PATH,
             element: <SettingsMenu/>
+          },
+          {
+            path: QUESTIONS_PANEL,
+            element: <></>
           }
         ]
       },
@@ -36,9 +40,6 @@ const router = createHashRouter([
     ]
   }
 ]);
-
-console.log(BASE_PATH);
-
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
