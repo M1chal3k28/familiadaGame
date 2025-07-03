@@ -16,7 +16,7 @@ const MenuContainer: React.FC = () => {
         console.log(container);
     };
 
-    const { particlesMovement, particlesMouseReaction } = useSettings();
+    const { particlesMovement, particlesMouseReaction } = useSettings()!;
     
     const options: ISourceOptions = useMemo(
         () => ({
