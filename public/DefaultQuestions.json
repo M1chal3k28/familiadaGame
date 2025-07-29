@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "type": "normal",
+        "question": "Example question",
+        "answers": [
+            { "code": "Answer1", "score": 15 },
+            { "code": "Remove question using the X button", "score": 1 },
+            { "code": "Edit question using the pencil button", "score": 2 }
+        ]
+    }
+]

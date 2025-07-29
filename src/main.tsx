@@ -9,6 +9,8 @@ import { BASE_PATH, PLAY_PATH, QUESTIONS_PANEL, SETTINGS_PATH } from './PathConf
 import { SettingsProvider } from './SettingsContext.tsx';
 import MainMenu from './Components/Menu/MainMenu.tsx';
 import SettingsMenu from './Components/Menu/SettingsMenu.tsx';
+import QuestionsMainPanel from './Components/Menu/QuestionsPanel/QuestionsMainPanel.tsx';
+import QuestionContainer from './Components/Menu/QuestionsPanel/QuestionContainer.tsx';
 
 const router = createHashRouter([
   {
@@ -29,7 +31,13 @@ const router = createHashRouter([
           },
           {
             path: QUESTIONS_PANEL,
-            element: <></>
+            element: <QuestionsMainPanel/>,
+            children: [
+              {
+                path: QUESTIONS_PANEL,
+                element: <QuestionContainer/>
+              }
+            ]
           }
         ]
       },

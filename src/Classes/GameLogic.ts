@@ -1,6 +1,6 @@
 import { GameInterface, Question, GamePhase, Round, Answer, WhatTeam, GameState } from "../Types";
 import Team from "./Team";
-import { getQuestions } from "../services/QuestionService";
+// import { getQuestions } from "../services/QuestionService";
 // import Game from "../Game";
 
 interface GameHistory {
@@ -14,7 +14,7 @@ export class GameLogic {
     private redoHistory: GameHistory[] = [];
     private eventTarget: EventTarget = new EventTarget();
 
-    private constructor(questions: Question[]) {
+    public constructor(questions: Question[]) {
         this.gameInfo = {
             team1: new Team(WhatTeam.TEAM1, "Drużyna 1"),
             team2: new Team(WhatTeam.TEAM2, "Drużyna 2"),
@@ -195,7 +195,7 @@ export class GameLogic {
         answer.revealed = true;
         answer.revealedByTeam = this.gameInfo.currentTeam;
         round.points += answer.score;
-        round.question.questionMeta.answersRevealed += 1;
+        round.question.questionMeta!.answersRevealed += 1;
     }
 
     /**
@@ -209,7 +209,7 @@ export class GameLogic {
      */
     private handleMainPhaseAnswer() {
         const answeredByStartingTeam = this.gameInfo.currentTeam === this.gameInfo.startingTeam;
-        const allAnswersRevealed = this.currentRound.question.questionMeta.answersRevealed === this.currentRound.question.questionMeta.answerCount;
+        const allAnswersRevealed = this.currentRound.question.questionMeta!.answersRevealed === this.currentRound.question.questionMeta!.answerCount;
 
         // Check if all answers are revealed by the starting team
         if (answeredByStartingTeam && allAnswersRevealed) {
@@ -231,7 +231,7 @@ export class GameLogic {
 
     private handleIntroPhaseAnswer(answerObj: Answer) {
         const round = this.currentRound;
-        const isBestAnswer = round.question.questionMeta.mostScoredAnswerCode === answerObj.code;
+        const isBestAnswer = round.question.questionMeta!.mostScoredAnswerCode === answerObj.code;
 
 
         // if starting team got best answer
@@ -257,7 +257,7 @@ export class GameLogic {
 
             // If only one answer is revealed check which team got it
             if (revealed.length === 1)
-                winner = revealed[0].revealedByTeam;
+                winner = revealed[0].revealedByTeam!;
 
             // If two answers are revealed check which team got better
             else if (revealed.length === 2)
@@ -419,7 +419,7 @@ export class GameLogic {
                 question: {
                     ...r.question,
                     answers: r.question.answers.map(a => ({ ...a })),
-                    questionMeta: { ...r.question.questionMeta }
+                    questionMeta: { ...r.question.questionMeta! }
                 }
             }))
         };
@@ -467,10 +467,10 @@ export class GameLogic {
      * Creates a new instance of the GameLogic class with questions fetched from the API.
      * @returns A new GameLogic instance.
     */
-    public static async createInstance(): Promise<GameLogic> {
-       const questions = await getQuestions();
-       return new GameLogic(questions);
-    }
+    // public static async createInstance(): Promise<GameLogic> {
+    //    const questions = await getQuestions();
+    //    return new GameLogic(questions);
+    // }
     
     /**
      * Register a callback to be called whenever the game state changes.

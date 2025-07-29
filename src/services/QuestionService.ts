@@ -1,20 +1,6 @@
 import { Question, QuestionType, Answer, QuestionMeta, WhatTeam } from "../Types";
 
-// Primitive version of question service
-// TODO: Build a real question service where questions can be added and removed by user
-const STORAGE_KEY = "questions";
-
-/**
- * Retrieves the questions stored in local storage.
- * @returns The array of questions stored in local storage.
- */
-export const getQuestions = async(): Promise<Question[]> => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-        await initQuestions();
-    }
-    
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-};
+// Functions to prepare questions for the game
 
 /**
  * Sorts array of questions by their type and id.
@@ -59,7 +45,7 @@ const sortAnswersByScore = (array: Answer[]): Answer[] => {
  * @returns A new array of questions with answers sorted by score
  *          and questions sorted by type and id.
  */
-const prepareQuestions = (array: Question[]): Question[] => {
+export const prepareQuestions = (array: Question[]): Question[] => {
     const processed = array.map((q) => ({
         ...q,
         answers: sortAnswersByScore(q.answers),
@@ -70,36 +56,6 @@ const prepareQuestions = (array: Question[]): Question[] => {
     });
 
     return sortByIdAndType(processed);
-};
-
-/**
- * Stores the provided array of questions in local storage.
- * The questions are first prepared by sorting their answers by score
- * and sorting the questions by their type and id.
- * 
- * @param questions - The array of questions to be stored.
- */
-export const setQuestions = (questions: Question[]) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-};
-
-/**
- * Initializes the question service.
- * 
- * The function first loads a JSON file with questions from the server and
- * then stores the questions in local storage after preparing them by sorting
- * their answers by score and sorting the questions by type and id.
- * 
- * @returns A promise that resolves when the operation is complete.
- */
-export const initQuestions = async (): Promise<void> => {
-    // TODO: Make this load only once
-    // Load from json (for now)
-
-    const res = await fetch(`${import.meta.env.BASE_URL}${STORAGE_KEY}.json`);
-    const data = await res.json();
-    const processed = prepareQuestions(data);
-    setQuestions(processed);
 };
 
 /**

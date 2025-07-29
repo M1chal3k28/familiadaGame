@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { initQuestions } from './services/QuestionService';
 import { Outlet } from 'react-router-dom';
 
 import { initParticlesEngine } from "@tsparticles/react";
@@ -8,9 +7,6 @@ import { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
 function App() {
-  useEffect(() => {
-    initQuestions();
-  }, []);
 
   const [_, setInit] = useState(false);
   // this should be run only once per application lifetime

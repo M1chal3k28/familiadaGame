@@ -6,8 +6,8 @@ import GameLogic from "./Classes/GameLogic";
 export interface Answer {
     code: string;
     score: number;
-    revealed: boolean;
-    revealedByTeam: WhatTeam;
+    revealed?: boolean;
+    revealedByTeam?: WhatTeam;
 };
 
 export enum QuestionType {
@@ -27,7 +27,7 @@ export interface Question {
     type: QuestionType;
     question: string;
     answers: Answer[];
-    questionMeta: QuestionMeta;
+    questionMeta?: QuestionMeta;
 };
 
 export enum GamePhase {

@@ -1,25 +1,45 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { Question, QuestionType } from './Types';
 
 type Settings = {
     particlesMovement: boolean;
     particlesMouseReaction: boolean;
+    questions: Question[];
 
     toggleParticlesMovement: () => void;
     toggleParticlesMouseReaction: () => void;
+    setQuestions: (questions: Question[]) => void;
 };
 
 type StoredSettings = {
     particlesMovement: boolean;
     particlesMouseReaction: boolean;
+    questions: Question[];
 }
+
+const defaultQuestions: Question[] = [
+    {
+        id: 1,
+        type: QuestionType.NORMAL,
+        question: "Example question",
+        answers: [
+            { code: "Answer1", score: 15 },
+            { code: "Remove question using the X button", score: 1 },
+            { code: "Edit question using the pencil button", score: 2 }
+        ]
+    }
+];
 
 const defaultSettings: StoredSettings = {
     particlesMouseReaction: true,
     particlesMovement: true,
+    questions: defaultQuestions
+    
 
     // toggleParticlesMouseReaction: () => {},
     // toggleParticlesMovement: () => {}
 };
+
 
 export const loadSettingsFromLocalStorage = (): StoredSettings => {
     const storedSettings = localStorage.getItem('settings');
@@ -28,7 +48,8 @@ export const loadSettingsFromLocalStorage = (): StoredSettings => {
             const parsedSettings = JSON.parse(storedSettings);
             return {
                 particlesMovement: parsedSettings.particlesMovement,
-                particlesMouseReaction: parsedSettings.particlesMouseReaction
+                particlesMouseReaction: parsedSettings.particlesMouseReaction,
+                questions: parsedSettings.questions
             };
         } catch (error) {
             console.warn('Error parsing stored settings:', error, "Using default settings.");
@@ -60,6 +81,7 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }: 
 
     const [particlesMovement, setParticlesMovement] = useState(initialSettings.particlesMovement);
     const [particlesMouseReaction, setParticlesMouseReaction] = useState(initialSettings.particlesMouseReaction);
+    const [questions, setQuestions] = useState(initialSettings.questions);
 
     const toggleParticlesMovement = () => setParticlesMovement(!particlesMovement);
     const toggleParticlesMouseReaction = () => setParticlesMouseReaction(!particlesMouseReaction);
@@ -67,7 +89,8 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }: 
     useEffect(() => {
         saveSettingsToLocalStorage({
             particlesMovement,
-            particlesMouseReaction
+            particlesMouseReaction,
+            questions
         });
     }, [particlesMovement, particlesMouseReaction]);
 
@@ -75,9 +98,11 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }: 
         <SettingsContext value={{
             particlesMovement,
             particlesMouseReaction,
+            questions,
 
             toggleParticlesMovement,
-            toggleParticlesMouseReaction
+            toggleParticlesMouseReaction,
+            setQuestions
         }}>
             {children}
         </SettingsContext>

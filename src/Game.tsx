@@ -3,17 +3,16 @@ import "./Components/GameBoard"
 import GameLogic from "./Classes/GameLogic";
 // import { WhatTeam } from "./Types";
 import GameBoard from "./Components/GameBoard";
+import { useSettings } from "./SettingsContext";
+import { prepareQuestions } from "./services/QuestionService";
 // import "./Components/ControlPanel"
 // import ControlPanel from "./Components/ControlPanel";
 
 const Game: React.FC = () => {
+  const questions = useSettings()!.questions;
+
   // Load game logic
-  const [gameLogic, setGameLogic] = useState<GameLogic | null>(null);
-  useEffect(() => {
-    GameLogic.createInstance().then((gameLogic) => {
-      setGameLogic(gameLogic);  
-    });
-  }, []);
+  const [gameLogic] = useState<GameLogic>(new GameLogic(prepareQuestions(questions)));
 
   // To force rerender
   const [_, forceRerender] = useReducer((x) => x + 1, 0);
