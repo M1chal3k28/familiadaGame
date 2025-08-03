@@ -92,7 +92,7 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }: 
             particlesMouseReaction,
             questions
         });
-    }, [particlesMovement, particlesMouseReaction]);
+    }, [particlesMovement, particlesMouseReaction, questions]);
 
     return (
         <SettingsContext value={{

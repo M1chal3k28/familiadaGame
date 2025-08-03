@@ -1,10 +1,11 @@
 import React from "react";
+import ImportButton from "./ImportButton";
 
-const QuestionContainer: React.FC = () => {
+const QuestionContainer: React.FC = () => { 
     return (
         <main className="menuMain">
             <div className="flex flex-row">
-                <button className="menuButton menuSmallerTextSize">Import</button>
+                <ImportButton className="menuSmallerTextSize menuButton"/>
             </div>
         </main>
     );
