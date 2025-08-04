@@ -69,4 +69,36 @@
     .menuFooter {
         @apply w-full h-1/6 box-border flex flex-col justify-center items-center text-white
     }
+
+    .notification {
+        @apply flex p-5 flex-col rounded-md m-2 relative
+    }
+
+    .notificationTitle {
+        @apply font-bold first-letter:uppercase
+    }
+
+    .notificationMessage {
+        @apply ml-1
+    }
+
+    .notification.info {
+        @apply bg-blue-500
+    } 
+
+    .notification.success {
+        @apply bg-green-500
+    }
+
+    .notification.warning {
+        @apply bg-yellow-500
+    }
+
+    .notification.error {
+        @apply bg-red-500
+    }
+
+    .notificationClose {
+        @apply cursor-pointer absolute top-0 right-0 m-2
+    }
 }
