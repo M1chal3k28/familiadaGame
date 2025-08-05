@@ -101,4 +101,8 @@
     .notificationClose {
         @apply cursor-pointer absolute top-0 right-0 m-2
     }
+
+    .notificationProgress {
+        @apply absolute bottom-0 left-0 right-0 h-1 bg-black rounded-b-md
+    }
 }

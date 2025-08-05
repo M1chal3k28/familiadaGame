@@ -79,8 +79,8 @@ export class NotificationManager {
   }
 
 
-  public remove = (notification: NotificationProps) => {
-    this.notifications = this.notifications.filter((n) => notification.id !== n.id);
+  public remove = (notificationId: string) => {
+    this.notifications = this.notifications.filter((n) => n.id !== notificationId);
     this.emitChange();
   }
 

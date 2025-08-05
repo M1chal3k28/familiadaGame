@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { notificationManager } from "./NotificationManager"
-import { NotificationProps, NotificationComponent } from "./Notification";
+import { NotificationProps } from "./Notification";
+import { Notifications } from "./Notifications";
 
 const NotificationContainer: React.FC = () => {
     const [notifications, setNotifications] = useState<NotificationProps[]>([]);
@@ -32,8 +33,8 @@ const NotificationContainer: React.FC = () => {
         notificationManager.info("This is an info", "info", 1000, () => {}, true);
     };
 
-    const onRequestHide = () => {
-        console.log("onRequestHide");
+    const onRequestHide = (notificationId: string) => {
+        notificationManager.remove(notificationId);
     };
 
     return (
@@ -44,9 +45,7 @@ const NotificationContainer: React.FC = () => {
             <button className="menuButton text-black" onClick={addWarning}>addWarning</button>
             <button className="menuButton text-black" onClick={addError}>addError</button>
             <h1>Notifications: {notifications.length}</h1>
-            {notifications.map((notification: NotificationProps) => (
-                <NotificationComponent key={notification.id} {...notification} onRequestHide={onRequestHide}/>
-            ))}
+            <Notifications notifications={notifications} onRequestHide={onRequestHide}/>
         </div>
     )
 }
