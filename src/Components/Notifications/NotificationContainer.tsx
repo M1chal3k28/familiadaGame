@@ -5,6 +5,7 @@ import { NotificationProps, NotificationComponent } from "./Notification";
 const NotificationContainer: React.FC = () => {
     const [notifications, setNotifications] = useState<NotificationProps[]>([]);
 
+    // Subscribe to notifications and update the state to reflect the new notifications
     useEffect(() => {
         const unsubscribe = notificationManager.subscribe((notifications) => {
             setNotifications(() => notifications);

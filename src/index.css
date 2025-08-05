@@ -71,7 +71,7 @@
     }
 
     .notification {
-        @apply flex p-5 flex-col rounded-md m-2 relative
+        @apply flex p-5 flex-col rounded-md m-2 relative cursor-pointer
     }
 
     .notificationTitle {
