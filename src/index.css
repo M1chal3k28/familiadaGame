@@ -1,6 +1,9 @@
+@import "./Components/Notifications/NotificationStyles.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @font-face {
     font-family: "PixelFont";

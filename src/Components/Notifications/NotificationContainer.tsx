@@ -22,7 +22,7 @@ const NotificationContainer: React.FC = () => {
     };
 
     const addSuccess = () => {
-        notificationManager.success("This is a success", "success", 1000, () => {}, true);
+        notificationManager.success("This is a success", "success", 0, () => {}, true);
     };
 
     const addError = () => {
