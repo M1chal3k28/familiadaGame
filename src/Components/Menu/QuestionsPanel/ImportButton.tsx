@@ -1,5 +1,6 @@
 import { useSettings } from "../../../SettingsContext";
 import { useEffect, useRef } from "react";
+import { notificationManager } from "../../Notifications/NotificationManager";
 
 const ImportButton: React.FC<{className?: string}> = ({className}) => {
     const { setQuestions } = useSettings()!;
@@ -43,12 +44,14 @@ const ImportButton: React.FC<{className?: string}> = ({className}) => {
                 const file = evt.dataTransfer.files[0];
                 if (!file) {
                     // TODO: show error message
+                    notificationManager.error("No file selected", "ERROR", 5000, () => {}, true);
                     return;
                 }
 
                 if (file.type !== "application/json") {
                     console.log(file.type)
                     // TODO: show error message
+                    notificationManager.error("Wrong file type ! Select .json", "ERROR", 5000, () => {}, true);
                     return;
                 }
                 const text = await file.text();
@@ -57,6 +60,7 @@ const ImportButton: React.FC<{className?: string}> = ({className}) => {
 
                 setQuestions(JSON.parse(text));
                 // TODO: show success message
+                notificationManager.success(`Successfully imported file ${file.name}`, "Success", 5000, () => {}, true);
             }
 
         };
