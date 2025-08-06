@@ -13,7 +13,7 @@ import { useSettings } from "../../SettingsContext";
 const MenuContainer: React.FC = () => {
     // Set up tsparticles
     const particlesLoaded = async (container?: Container): Promise<void> => {
-        console.log(container);
+        () => container;
     };
 
     const { particlesMovement, particlesMouseReaction } = useSettings()!;
