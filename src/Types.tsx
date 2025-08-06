@@ -2,6 +2,7 @@ import { RefObject } from "react";
 import "./Classes/Team";
 import Team from "./Classes/Team";
 import GameLogic from "./Classes/GameLogic";
+import Ajv from "ajv";
 
 export interface Answer {
     code: string;
@@ -29,6 +30,20 @@ export interface Question {
     answers: Answer[];
     questionMeta?: QuestionMeta;
 };
+
+const SavedQuestionSchema = {
+    type: "object",
+    properties: {
+        id: { type: "number" },
+        type: { type: "string" },
+        question: { type: "string" },
+        answers: { type: "array" }
+    },
+    required: ["id", "type", "question", "answers"],
+    additionalProperties: false
+};
+
+export const SavedQuestionValidator = new Ajv().compile(SavedQuestionSchema);
 
 export enum GamePhase {
     QUESTION_INTRO = "questionIntro",
