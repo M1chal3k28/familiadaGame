@@ -1,8 +1,9 @@
-import { createRef, useRef } from "react";
+import { createRef } from "react";
 import NotificationComponent, { NotificationProps } from "./Notification"
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import "./NotificationStyles.css"
+import { ANIMATION_DURATION } from "./AnimationDuration";
 
 export type NotificationsProps = {
     notifications: NotificationProps[],
@@ -18,9 +19,10 @@ export const Notifications: React.FC<NotificationsProps> = ({notifications, onRe
             <CSSTransition
                 in={true}
                 key={key}
-                timeout={{enter: 300, exit: 300}}
+                timeout={{enter: ANIMATION_DURATION, exit: ANIMATION_DURATION}}
                 classNames="notification"
                 nodeRef={nodeRef}
+                unmountOnExit
             >
                 <NotificationComponent notificationRef={nodeRef} key={notification.id} {...notification} onRequestHide={() => onRequestHide(notification.id)} />
             </CSSTransition>

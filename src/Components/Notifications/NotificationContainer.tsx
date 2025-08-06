@@ -1,15 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { notificationManager } from "./NotificationManager"
 import { NotificationProps } from "./Notification";
 import { Notifications } from "./Notifications";
+import clsx from "clsx";
+import { ANIMATION_DURATION } from "./AnimationDuration";
 
 const NotificationContainer: React.FC = () => {
     const [notifications, setNotifications] = useState<NotificationProps[]>([]);
+
+    const timerRef = useRef<number | null>(null);
+    const [isEmpty, setIsEmpty] = useState(true);
 
     // Subscribe to notifications and update the state to reflect the new notifications
     useEffect(() => {
         const unsubscribe = notificationManager.subscribe((notifications) => {
             setNotifications(() => notifications);
+            
+            // Handle empty state
+            if (timerRef.current) clearTimeout(timerRef.current);
+            if (notifications.length > 0) {
+                setIsEmpty(false);
+            } else { 
+                timerRef.current = setTimeout(() => setIsEmpty(true), ANIMATION_DURATION + 50);
+            }
         });
 
         return () => {
@@ -17,37 +30,15 @@ const NotificationContainer: React.FC = () => {
         };
     }, []);
 
-    const addWarning = () => {
-        notificationManager.warning("This is a warning", "warning", 1000, () => {}, true);
-    };
-
-    const addSuccess = () => {
-        notificationManager.success("This is a success", "success", 0, () => {}, true);
-    };
-
-    const addError = () => {
-        notificationManager.error("This is an error", "error", 1000, () => {}, true);
-    };
-
-    const addInfo = () => {
-        notificationManager.info("This is an info", "info", 1000, () => {}, true);
-    };
-
     const onRequestHide = (notificationId: string) => {
         notificationManager.remove(notificationId);
     };
 
     return (
-        <div className="fixed top-0 right-0 z-50">
-            TESTING
-            <button className="menuButton text-black" onClick={addInfo}>addInfo</button>
-            <button className="menuButton text-black" onClick={addSuccess}>addSuccess</button>
-            <button className="menuButton text-black" onClick={addWarning}>addWarning</button>
-            <button className="menuButton text-black" onClick={addError}>addError</button>
-            <h1>Notifications: {notifications.length}</h1>
-            <Notifications notifications={notifications} onRequestHide={onRequestHide}/>
-        </div>
-    )
+            <div className={clsx("fixed top-0 right-0 w-1/3 z-50", { 'hidden': isEmpty })}>
+                <Notifications notifications={notifications} onRequestHide={onRequestHide}/>
+            </div>
+    );
 }
 
 export default NotificationContainer;
