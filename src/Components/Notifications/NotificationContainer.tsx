@@ -35,7 +35,7 @@ const NotificationContainer: React.FC = () => {
     };
 
     return (
-            <div className={clsx("fixed top-0 right-0 w-1/3 z-50", { 'hidden': isEmpty })}>
+            <div className={clsx("fixed top-0 right-0 w-1/4 z-50", { 'hidden': isEmpty })}>
                 <Notifications notifications={notifications} onRequestHide={onRequestHide}/>
             </div>
     );
