@@ -5,12 +5,13 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import './Game'
 import Game from './Game';
 import MenuContainer from './Components/Menu/MenuContainer.tsx';
-import { BASE_PATH, PLAY_PATH, QUESTIONS_PANEL, SETTINGS_PATH } from './PathConfig.tsx';
+import { BASE_PATH, PLAY_PATH, QUESTIONS_PANEL, SETTINGS_PATH, TESTING_PATH } from './PathConfig.tsx';
 import { SettingsProvider } from './SettingsContext.tsx';
 import MainMenu from './Components/Menu/MainMenu.tsx';
 import SettingsMenu from './Components/Menu/SettingsMenu.tsx';
 import QuestionsMainPanel from './Components/Menu/QuestionsPanel/QuestionsMainPanel.tsx';
 import QuestionContainer from './Components/Menu/QuestionsPanel/QuestionContainer.tsx';
+import NotificationContainer from './Components/Notifications/NotificationContainer.tsx';
 
 const router = createHashRouter([
   {
@@ -44,6 +45,10 @@ const router = createHashRouter([
       {
         path: PLAY_PATH,
         element: <Game/>,
+      },
+      {
+        path: TESTING_PATH,
+        element: <NotificationContainer/>,
       }
     ]
   }

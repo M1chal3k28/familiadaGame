@@ -1,0 +1,65 @@
+:root {
+  --animation-delay: 300ms;
+}
+
+.notification-enter {
+  visibility: hidden;
+  transform: translate3d(100%, 0, 0);
+}
+
+.notification-enter-active {
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  transition: all var(--animation-delay) ease-in-out;
+}
+
+.notification-exit {
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+}
+
+.notification-exit-active {
+  /* visibility: hidden; */
+  transform: translate3d(100%, 0, 0);
+  transition: all var(--animation-delay) ease-in-out;
+}
+
+@tailwind components;
+
+@layer components {
+  .notification {
+        @apply flex p-5 flex-col rounded-md m-2 relative cursor-pointer
+    }
+
+    .notificationTitle {
+        @apply font-bold first-letter:uppercase
+    }
+
+    .notificationMessage {
+        @apply ml-1
+    }
+
+    .notification.info {
+        @apply bg-blue-500
+    } 
+
+    .notification.success {
+        @apply bg-green-500
+    }
+
+    .notification.warning {
+        @apply bg-yellow-500
+    }
+
+    .notification.error {
+        @apply bg-red-500
+    }
+
+    .notificationClose {
+        @apply cursor-pointer absolute top-0 right-0 m-2
+    }
+
+    .notificationProgress {
+        @apply absolute bottom-0 left-0 right-0 h-1 bg-white rounded-b-md
+    }
+}
