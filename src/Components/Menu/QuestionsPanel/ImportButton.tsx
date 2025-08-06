@@ -2,7 +2,6 @@ import { useSettings } from "../../../SettingsContext";
 import { useEffect, useRef } from "react";
 import { notificationManager } from "../../Notifications/NotificationManager";
 import "ajv";
-import Ajv from "ajv/dist/core";
 import { Question, SavedQuestionValidator } from "../../../Types";
 
 const ImportButton: React.FC<{className?: string}> = ({className}) => {
