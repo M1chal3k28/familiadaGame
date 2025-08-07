@@ -1,12 +1,41 @@
-import { useSettings } from "../../../SettingsContext";
 import { useEffect, useRef } from "react";
 import { notificationManager } from "../../Notifications/NotificationManager";
 import "ajv";
-import { Question, SavedQuestionValidator } from "../../../Types";
 
-const ImportButton: React.FC<{className?: string}> = ({className}) => {
-    const { setQuestions } = useSettings()!;
+export enum FileType {
+    JSON = "application/json",
+    TXT = "text/plain",
+}
 
+export const FileTypeExtensions = {
+    [FileType.JSON]: ".json",
+    [FileType.TXT]: ".txt",
+};
+
+export type ImportButtonProps = {
+    className?: string,
+    callback?: (fileData: string) => Promise<boolean>,
+    acceptedTypes?: FileType[],
+};
+
+
+/**
+ * ImportButton component
+ * 
+ * This component provides a button that allows the user to import a file.
+ * When clicked, it shows a div that allows the user to drag and drop a file.
+ * When the file is dropped, it is read and passed as a string to the callback.
+ * If the callback returns false, the component stops there.
+ * If the callback returns true or does not return anything, the component shows a success notification.
+ * 
+ * The component also blocks the default drag and drop behavior of the browser.
+ * 
+ * @param {string} [className] - The className of the button.
+ * @param {(fileData: string) => Promise<boolean>} [callback] - The callback when a file is dropped.
+ * @param {FileType[]} [acceptedTypes] - The accepted types of files.
+ * @returns {JSX.Element}
+ */
+export const ImportButton: React.FC<ImportButtonProps> = ({className, callback, acceptedTypes}) => {
     // Block drag and drop default behavior
     useEffect(() => {
         const preventDefaults = (e: Event) => {
@@ -25,6 +54,45 @@ const ImportButton: React.FC<{className?: string}> = ({className}) => {
 
     const dropZone = useRef<HTMLDivElement>(null);
 
+    const hideImportZone = () => {
+        if (dropZone.current) {
+            dropZone.current.classList.add("hidden");
+            dropZone.current.classList.remove("flex", "z-10");
+            dropZone.current.removeEventListener('drop', handleDrop);
+        }
+    };
+
+    const handleDrop = async (evt: DragEvent) => {
+        evt.preventDefault(); 
+        hideImportZone();
+        
+        if (evt.dataTransfer?.files) {
+            // Use DataTransferItemList interface to access the file(s)
+            // Get only the first file
+            const file = evt.dataTransfer.files[0];
+            // Check if it is a file
+            if (!file) {
+                notificationManager.error("No file selected", "ERROR", 5000, () => {}, true);
+                return;
+            }
+            // Check if it is a accepted type
+            if (acceptedTypes && !acceptedTypes.includes(file.type as FileType)) {
+                notificationManager.error(`Wrong file type ! Select ${acceptedTypes.map((t) => FileTypeExtensions[t]).join(", ")}`, "ERROR", 5000, () => {}, true);
+                return;
+            }
+
+            // Read the file
+            const fileData = await file.text();
+            // Execute the callback
+            if (callback)
+                if(!(await callback(fileData)))
+                    return;
+
+            // Show notification about success
+            notificationManager.success(`Successfully imported file ${file.name}`, "Success", 5000, () => {}, true);
+        }
+
+    };
     const handleImport = () => {
         let dropZoneElement = dropZone.current;
         if (!dropZoneElement) {
@@ -35,55 +103,17 @@ const ImportButton: React.FC<{className?: string}> = ({className}) => {
         dropZoneElement.classList.add("flex");
         dropZoneElement.classList.add("z-10");
 
-        const handleDrop = async (evt: DragEvent) => {
-            evt.preventDefault();
-            dropZoneElement.classList.add("hidden");
-            dropZoneElement.classList.remove("flex", "z-10");
-
-            dropZoneElement.removeEventListener('drop', handleDrop);
-            
-            if (evt.dataTransfer?.files) {
-                const file = evt.dataTransfer.files[0];
-                if (!file) {
-                    notificationManager.error("No file selected", "ERROR", 5000, () => {}, true);
-                    return;
-                }
-
-                if (file.type !== "application/json") {
-                    notificationManager.error("Wrong file type ! Select .json", "ERROR", 5000, () => {}, true);
-                    return;
-                }
-                const text = await file.text();
-
-                // TODO: validate
-                const questions = JSON.parse(text);
-                let valid = true;
-                questions.forEach((q: Question) => {
-                    valid = valid && SavedQuestionValidator(q);
-                    if (!valid) {
-                        return;
-                    }
-                });
-
-                if (!valid) {
-                    notificationManager.error("Invalid JSON file, please choose a valid one exported by the app", "ERROR", 5000, () => {}, true);
-                    return;
-                }
-                
-                setQuestions(JSON.parse(text));
-                notificationManager.success(`Successfully imported file ${file.name}`, "Success", 5000, () => {}, true);
-            }
-
-        };
 
         dropZoneElement.addEventListener('drop', handleDrop, { once: true });
     };
 
+    // TODO: Add support for mobile devices
     return (
         <>
             <button className={className || ""} onClick={handleImport}>Import</button>
             <div ref={dropZone} id="dropzone" className="hidden flex-col fixed top-0 left-0 w-screen h-screen items-center justify-center bg-white">
-                <p className="blur-none">Drag JSON file with questions now</p>
+                <p className="blur-none">Drag file to import now</p>
+                <button className="menuButton text-black" onClick={hideImportZone}>Cancel</button>
             </div>
         </>
     );
