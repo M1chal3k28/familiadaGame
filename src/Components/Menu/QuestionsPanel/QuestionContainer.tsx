@@ -23,6 +23,7 @@ const QuestionContainer: React.FC = () => {
         }
         
         setQuestions(JSON.parse(fileData));
+        notificationManager.success("Questions imported successfully", "SUCCESS", 5000, () => {}, true);
         return true;  
     };
 

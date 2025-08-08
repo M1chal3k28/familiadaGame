@@ -85,11 +85,7 @@ export const ImportButton: React.FC<ImportButtonProps> = ({className, callback, 
             const fileData = await file.text();
             // Execute the callback
             if (callback)
-                if(!(await callback(fileData)))
-                    return;
-
-            // Show notification about success
-            notificationManager.success(`Successfully imported file ${file.name}`, "Success", 5000, () => {}, true);
+                callback(fileData)
         }
 
     };

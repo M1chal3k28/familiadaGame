@@ -86,6 +86,7 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }: 
     const toggleParticlesMovement = () => setParticlesMovement(!particlesMovement);
     const toggleParticlesMouseReaction = () => setParticlesMouseReaction(!particlesMouseReaction);
 
+    // Save settings to local storage every time they change
     useEffect(() => {
         saveSettingsToLocalStorage({
             particlesMovement,
