@@ -1,10 +1,9 @@
-import React, { createRef } from "react";
+import React from "react";
 import {ImportButton, FileType} from "./ImportButton";
 import { Question, SavedQuestionValidator } from "../../../Types";
 import { notificationManager } from "../../Notifications/NotificationManager";
 import { useSettings } from "../../../SettingsContext";
 import QuestionBlock from "./QuestionBlock";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./QuestionPanel.css"
 
 const QuestionContainer: React.FC = () => { 
