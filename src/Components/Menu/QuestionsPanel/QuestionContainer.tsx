@@ -31,22 +31,27 @@ const QuestionContainer: React.FC = () => {
     };
 
     const handleExport = async (): Promise<void> => {
-        const blob = new Blob([JSON.stringify(questions)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "questions.json";
-        document.body.appendChild(link);
-        link.click();
-        URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+        try {
+            const blob = new Blob([JSON.stringify(questions)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "questions.json";
+            document.body.appendChild(link);
+            link.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+            notificationManager.info("Questions has been exported", "EXPORT", 5000, () => {}, true);
+        } catch (error: any) {
+            notificationManager.error(`Error exporting questions`, "ERROR", 5000, () => {}, true);
+        }
     };
 
     const questionBlocks = questions.map((question) => <QuestionBlock question={question} />);
 
     return (
         <main className="menuMain">
-            <div className="flex flex-col items-center h-full border-white border-double border-4 rounded-md w-[70%] overflow-auto p-2 gap-2">
+            <div className="flex flex-col items-center h-full border-white border-double border-4 rounded-md w-[80%] overflow-auto p-4 gap-2">
                 {questionBlocks}
             </div>
             <div className="flex flex-row">
