@@ -24,8 +24,8 @@ const defaultQuestions: Question[] = [
         question: "Example question",
         answers: [
             { code: "Answer1", score: 15 },
-            { code: "Remove question using the X button", score: 1 },
-            { code: "Edit question using the pencil button", score: 2 }
+            { code: "Swipe to the left to remove the question", score: 1 },
+            { code: "Swipe to the right to edit the question", score: 2 }
         ]
     }
 ];
