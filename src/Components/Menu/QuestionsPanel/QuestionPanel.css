@@ -21,6 +21,6 @@
 
 @layer components {
     .questionBlock {
-        @apply text-white font-bold p-5 rounded-md disabled:bg-gray-900 w-full border-2 border-white border-solid bg-black bg-opacity-30 backdrop-blur-sm cursor-grab hover:scale-[1.005] transition-transform duration-150 ease-in-out
+        @apply text-white font-bold p-5 rounded-md disabled:bg-gray-900 w-full border-2 border-white border-solid bg-black bg-opacity-30 backdrop-blur-sm cursor-grab hover:scale-[1.005] transition-[scale] duration-150 ease-in-out
     }
 }
