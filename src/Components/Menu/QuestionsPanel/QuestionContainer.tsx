@@ -46,7 +46,21 @@ const QuestionContainer: React.FC = () => {
         }
     };
 
-    const questionBlocks = questions.map((question) => <QuestionBlock question={question} key={question.id} />);
+    const removeQuestion = (id: number): void => {
+        if(confirm("Are you sure you want to remove this question ?")) {
+            setQuestions(questions.filter((question) => question.id !== id));
+            notificationManager.success("Question removed successfully", "SUCCESS", 5000, () => {}, true);
+        } else {
+            notificationManager.info("Question removal canceled", "INFO", 5000, () => {}, true);
+        }
+    };
+
+    const editQuestion = (id: number): void => {
+        // TODO
+        () => id; 
+    };
+
+    const questionBlocks = questions.map((question) => <QuestionBlock question={question} key={question.id} onRemove={removeQuestion} onEdit={editQuestion} />);
 
     return (
         <main className="menuMain">

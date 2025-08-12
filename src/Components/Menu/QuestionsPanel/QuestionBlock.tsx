@@ -4,7 +4,9 @@ import "./QuestionPanel.css";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 type QuestionBlockProps = {
-    question: Question
+    question: Question,
+    onRemove: (id: number) => void,
+    onEdit: (id: number) => void
 }
 
 const questionBlockDragBounds = {
@@ -13,8 +15,9 @@ const questionBlockDragBounds = {
     bottom: 100,
     left: -100
 };
+const percantageToMakeActionOnDrag = 0.75;
 
-const QuestionBlock: React.FC<QuestionBlockProps> = ({question}) => {
+const QuestionBlock: React.FC<QuestionBlockProps> = ({question, onRemove}) => {
     const answers = question.answers.map((answer: Answer, index) => (
         <div key={index} className="flex justify-between gap-2 text-boardLcd">
             <div title={answer.code} className="cursor-help w-8/12 overflow-hidden">&rarr; {answer.code.length > 5 ? answer.code.slice(0, 5) + "..." : answer.code}</div>
@@ -35,9 +38,9 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question}) => {
             y: y + ui.deltaY,
         });
 
-        if (questionBlockDelta.x <= questionBlockDragBounds.left * 0.75) {
+        if (questionBlockDelta.x <= questionBlockDragBounds.left * percantageToMakeActionOnDrag) {
             questionBlockDeleteRef.current?.classList.remove("hidden");
-        } else if (questionBlockDelta.x >= questionBlockDragBounds.right * 0.75) {
+        } else if (questionBlockDelta.x >= questionBlockDragBounds.right * percantageToMakeActionOnDrag) {
             questionBlockEditRef.current?.classList.remove("hidden");
         } else {
             questionBlockEditRef.current?.classList.add("hidden");
@@ -51,10 +54,18 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question}) => {
 
         questionBlockDeleteRef.current?.classList.add("hidden");
         questionBlockEditRef.current?.classList.add("hidden");
+
+        if (questionBlockDelta.x <= questionBlockDragBounds.left * percantageToMakeActionOnDrag) {
+            handleRemove();
+        }
     };
 
     const handleStartDragging = (_: DraggableEvent) => {
         () => _;
+    }
+    
+    const handleRemove = () => {
+        onRemove(question.id);
     }
 
     return (
@@ -80,13 +91,9 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question}) => {
                     </div>
                 </div>
 
-                <div ref={questionBlockEditRef} className="questionBlockOverlay hidden edit">
-                    EDIT
-                </div>
-
-                <div ref={questionBlockDeleteRef} className="questionBlockOverlay hidden delete">
-                    DELETE
-                </div>
+                {/* Overlay for delete and edit text */}
+                <div ref={questionBlockEditRef} className="questionBlockOverlay hidden edit">EDIT</div>
+                <div ref={questionBlockDeleteRef} className="questionBlockOverlay hidden delete">DELETE</div>
             </div>
         </Draggable>
     );
