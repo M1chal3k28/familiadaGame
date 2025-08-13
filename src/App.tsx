@@ -8,7 +8,6 @@ import { loadSlim } from "@tsparticles/slim";
 import NotificationContainer from './Components/Notifications/NotificationContainer';
 
 function App() {
-
   const [_, setInit] = useState(false);
   // this should be run only once per application lifetime
   useEffect(() => {

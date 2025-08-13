@@ -28,7 +28,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question, onRemove}) => {
     const ref = React.useRef<HTMLDivElement>(null);
     const questionBlockDeleteRef = React.useRef<HTMLDivElement>(null);
     const questionBlockEditRef = React.useRef<HTMLDivElement>(null);
-    const [ questionBlockPossiton, setQuestionBlockPossiton ] = React.useState({ x: 0, y: 0 });
+    const [ questionBlockPositon, setQuestionBlockPositon ] = React.useState({ x: 0, y: 0 });
     const [ questionBlockDelta, setQuestionBlockDelta ] = React.useState({ x: 0, y: 0 });
 
     const handleDrag = (_: DraggableEvent, ui: DraggableData) => {
@@ -38,6 +38,8 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question, onRemove}) => {
             y: y + ui.deltaY,
         });
 
+        // Check if drag is on the left or right
+        // Data here is delayed by 1 update but it's fine
         if (questionBlockDelta.x <= questionBlockDragBounds.left * percantageToMakeActionOnDrag) {
             questionBlockDeleteRef.current?.classList.remove("hidden");
         } else if (questionBlockDelta.x >= questionBlockDragBounds.right * percantageToMakeActionOnDrag) {
@@ -49,7 +51,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question, onRemove}) => {
     };
 
     const handleStopDragging = (_: DraggableEvent) => {
-        setQuestionBlockPossiton({ x: 0, y: 0 });
+        setQuestionBlockPositon({ x: 0, y: 0 });
         setQuestionBlockDelta({ x: 0, y: 0 });
 
         questionBlockDeleteRef.current?.classList.add("hidden");
@@ -74,7 +76,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({question, onRemove}) => {
         handle=".handle"
         scale={1}
         nodeRef={ref}
-        position={questionBlockPossiton}
+        position={questionBlockPositon}
         onStop={handleStopDragging}
         onStart={handleStartDragging}
         onDrag={handleDrag}

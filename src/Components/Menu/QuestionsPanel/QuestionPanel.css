@@ -21,7 +21,7 @@
 
 @layer components {
     .questionBlock {
-        @apply text-white font-bold p-5 rounded-md disabled:bg-gray-900 w-full border-2 relative border-white border-solid bg-black bg-opacity-30 backdrop-blur-sm cursor-grab hover:scale-[1.005] transition-transform duration-150 ease-out 
+        @apply text-white font-bold p-5 rounded-md disabled:bg-gray-900 w-full border-2 relative border-white border-solid bg-black bg-opacity-30 cursor-grab hover:scale-[1.005] transition-transform duration-150 ease-out 
     }
 
     .questionBlockOverlay {  
@@ -34,5 +34,9 @@
 
     .questionBlockOverlay.edit {
       @apply bg-blue-500
+    }
+
+    .questionContainer {
+      @apply flex flex-col items-center h-full border-white border-double border-4 rounded-md w-[80%] overflow-auto p-4 gap-2 overflow-x-hidden backdrop-blur-sm
     }
 }

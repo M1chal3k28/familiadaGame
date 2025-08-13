@@ -64,7 +64,7 @@ const QuestionContainer: React.FC = () => {
 
     return (
         <main className="menuMain">
-            <div className="flex flex-col items-center h-full border-white border-double border-4 rounded-md w-[80%] overflow-auto p-4 gap-2 overflow-x-hidden">
+            <div className="questionContainer">
                 {questionBlocks}
             </div>
             <div className="flex flex-row">
