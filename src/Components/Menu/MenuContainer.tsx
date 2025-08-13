@@ -25,7 +25,7 @@ const MenuContainer: React.FC = () => {
             value: "#000",
             },
         },
-        fpsLimit: 120,
+        fpsLimit: 60,
         interactivity: {
             events: {
                 onClick: {
@@ -73,6 +73,10 @@ const MenuContainer: React.FC = () => {
                     enable: true,
                 },
                 value: 80,
+                limit: {
+                    mode: "delete",
+                    value: 150,
+                },
             },
             opacity: {
                 value: 0.5,
@@ -83,6 +87,7 @@ const MenuContainer: React.FC = () => {
             size: {
                 value: { min: 1, max: 5 },
             },
+            
         },
         detectRetina: true,
         }),
